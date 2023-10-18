@@ -113,7 +113,7 @@ body {
 
 .choose_slider_items ul li .media-body span i {
   color: #FFC82A;
-  font-size: 12px;
+  font-size: 20px;
 }
 
 .choose_slider_items ul li p {
@@ -260,7 +260,7 @@ a:focus {
   margin: 0;
   color: #000000;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
 }
 
@@ -445,7 +445,7 @@ a:focus {
 
 .slider_section .detail-box p {
   color: #444;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .slider_section .detail-box a {
@@ -892,7 +892,7 @@ a:focus {
 }
 
 .info_section a i {
-  font-size: 18px;
+  font-size: 30px;
 }
 
 .info_section a:hover {
