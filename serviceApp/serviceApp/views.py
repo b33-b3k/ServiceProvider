@@ -16,3 +16,14 @@ def services_view(request):
 
 def contact_view(request):
     return render(request, 'contact.html')
+
+def register_view(request):
+    return render(request, 'register.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
+
+
+def forgot_password_view(request):
+    return render(request, 'forgot.html')

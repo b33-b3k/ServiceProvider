@@ -43,6 +43,7 @@
   </head>
 
   <body>
+    
     <div class="hero_area">
       <!-- header section strats -->
       <header class="header_section">
@@ -96,7 +97,12 @@
                     <a class="nav-link" href="{% url 'contact' %}"
                       >Contact Us</a
                     >
-                  </li>
+                    <li class="nav-item">
+    <a class="nav-link" href="{% url 'register' %}">
+        <button type="button" class="btn btn-primary rounded-pill py-2 px-4">Login/Signup</button>
+    </a>
+</li>
+
                 </ul>
               </div>
             </nav>
@@ -136,11 +142,49 @@
     </div>
 
     <!-- feature section -->
+    
+
+    <!-- end feature section -->
+
+    <!-- about section -->
+
+     <section class="about_section layout_padding-bottom">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6">
+          <div class="detail-box text-center">
+            <br>
+            <h2>About us</h2>
+             <style>
+    .detail-box h2 {
+      font-size: 2.5rem; /* Adjust the size as needed */
+    }
+
+    .detail-box p {
+      font-size: 1.25rem; /* Adjust the size as needed */
+    }
+  </style>
+            <p>
+              Our mission is to deliver exceptional service and customer
+              satisfaction with every project we undertake. With years of
+              industry experience, we have built a strong reputation for
+              quality workmanship and reliable service.
+            </p>
+            <a href=""> Read More </a>
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
     <section class="feature_section">
       <div class="container">
         <div class="feature_container">
           <div class="box">
             <div class="img-box">
+              <br>
               <svg
                 enable-background="new 0 0 511.995 511.995"
                 height="512"
@@ -208,34 +252,6 @@
               </svg>
             </div>
             <h5 class="name">Maintain</h5>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- end feature section -->
-
-    <!-- about section -->
-
-    <section class="about_section layout_padding-bottom">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-5 col-md-6">
-            <div class="detail-box">
-              <h2>About us</h2>
-              <p>
-                Our mission is to deliver exceptional service and customer
-                satisfaction with every project we undertake. With years of
-                industry experience, we have built a strong reputation for
-                quality workmanship and reliable service.
-              </p>
-              <a href=""> Read More </a>
-            </div>
-          </div>
-          <div class="col-lg-7 col-md-6">
-            <div class="img-box">
-              <img src="{% static 'images/about-img.jpg'%}" alt="" />
-            </div>
           </div>
         </div>
       </div>
@@ -550,31 +566,8 @@
           </div>
         </div>
       </div>
-      <div class="social-box">
-        <h4>Follow Us</h4>
-        <div class="box">
-          <style>
-            .gap {
-              margin-right: 20px; /* Adjust the value as needed */
-            }
-          </style>
-          <a href="https://www.facebook.com">
-            <i class="fa fa-facebook" aria-hidden="true"></i>
-            <span class="gap"></span>
-          </a>
-          <a href="https://www.twitter.com">
-            <i class="fa fa-twitter" aria-hidden="true"></i>
-            <span class="gap"></span>
-          </a>
-          <a href="https://www.youtube.com">
-            <i class="fa fa-youtube" aria-hidden="true"> </i>
-            <span class="gap"></span>
-          </a>
-          <a href="https://www.instagram.com">
-            <i class="fa fa-instagram" aria-hidden="true"></i>
-          </a>
-        </div>
-      </div>
+
+      <!-- End of .container -->
     </section>
 
     <!-- end info_section -->
@@ -595,4 +588,38 @@
 
     <!-- End Google Map -->
   </body>
+
+  <footer class="text-center text-lg-start" style="background-color: ##d1e3ff">
+    <div class="container d-flex justify-content-center py-5">
+      <button
+        type="button"
+        class="btn btn-primary btn-lg btn-floating mx-2"
+        style="background-color: ##ff8a1d"
+      >
+        <i class="fa fa-facebook-f"></i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary btn-lg btn-floating mx-2"
+        style="background-color: #54456b"
+      >
+        <i class="fa fa-instagram"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg btn-floating mx-2"
+        style="background-color: #54456b"
+      >
+        <i class="fa fa-twitter"></i>
+      </button>
+    </div>
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: #d1e3ff">
+      © 2021 HandyFix
+      
+  </footer>
+
+  <!-- End of .container -->
 </html>
