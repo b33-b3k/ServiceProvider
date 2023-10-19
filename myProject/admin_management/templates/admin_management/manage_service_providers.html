@@ -1,0 +1,19 @@
+{% comment %} <!DOCTYPE html>
+<html>
+  <head>
+    <title>Manage Service Providers</title>
+  </head>
+  <body>
+    <h1>Service Providers</h1>
+    <ul>
+      {% for provider in service_providers %}
+      <li>
+        {{ provider.name }} - {{ provider.email }} - {{ provider.phone }} - {{
+        provider.qualifications }}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
+{% endcomment %}
+<h1>Working</h1>
