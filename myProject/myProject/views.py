@@ -71,7 +71,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "You have been logged in successfully!")
-                return redirect('home')  # Redirect to the home page after successful login
+                return redirect('booking')  # Redirect to the home page after successful login
             else:
                 messages.error(request, "Invalid email or password. Please try again.")
                 return redirect('login')  # Redirect back to the login page if the authentication fails

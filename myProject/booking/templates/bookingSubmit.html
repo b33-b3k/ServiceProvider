@@ -1,41 +1,68 @@
 <title>Online Booking</title>
-{% extends 'layout.html' %}
-{% load static %}
-{% block body %}
-
-
-
-
+{% extends 'layout.html' %} {% load static %} {% block body %} 
 {% if user.is_authenticated %}
-<h1 class="text-center fPersian mt-3">Online Booking</h1>
 
 <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
-    <form method="post" action="{% url 'bookingSubmit' %}" class="me-2 ms-2" required>
-        {% csrf_token %}
-        
-        <!--input time-->
-        <h3 class="text-center fPersian mt-4">Time:</h3>
-        <div>
-            <select class="form-select fs-3 text-center" name="time">
-                {% for time in times %}
-                <option value="{{time}}">{{time}}</option>
-                {% endfor %}
-            </select>
-        </div>
+  <form
+    method="post"
+    action="{% url 'bookingSubmit' %}"
+    class="me-2 ms-2"
+    required
+  >
+    {% csrf_token %}
 
-        <button type="submit" class="btn btn-primary text-white mt-3 fPersian">Submit</button>
+    <!--input time-->
+    <h3 class="text-center fPersian mt-4">Choose your provider:</h3>
+    <!--template for card list-->
+{% comment %} {% for staff_member in staff %}
+  <div class="card text-center d-block" style="width: 30rem;">
+    <div class="card-body" style="height: 12rem;">
+      <h5 class="card-title">{{ staff_member.name }}</h5>
+      <p class="card-text">Contact Information: {{ staff_member.contact_information }}</p>
+      <p class="card-text">Tier: <i class="fas fa-star"></i> {{ staff_member.tier }}</p>
+      <p class="card-text">Service: {{ staff_member.service }}</p>
+      <p class="card-text">Experience: {{ staff_member.experience }} years</p>
+      <p class="card-text">Rating: {{ staff_member.rating }}</p>
+      <p class="card-text">{{ staff_member.bio }}</p>
+      <a href="#" class="btn btn-primary" style="margin-top: 1rem; display: block;">Book Now</a>
+    </div>
+  </div>
+{% endfor %} {% endcomment %}
+{% for staff_member in staff %}
+  <div class="card border-primary custom-card mb-3" style="width: 100%;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>{{ staff_member.name }}</h2>
+      {% if staff_member.tier == 'Gold' %}
+        <i class="fas fa-star" style="color: gold;"></i>
+      {% endif %}
+    </div>
+    <div class="card-body" style="display: flex; flex-direction: column; text-align: left;">
+      <p style="margin: -1;"><strong>Contact Information:</strong> {{ staff_member.contact_information }}</p>
+      <p style="margin: -1;"><strong>Tier:</strong> {{ staff_member.tier }}</p>
+      <p style="margin: -1;"><strong>Service:</strong> {{ staff_member.service }}</p>
+      <p style="margin: -1;"><strong>Experience:</strong> {{ staff_member.experience }} years</p>
+      <p style="margin: -1;"><strong>Rating:</strong> {{ staff_member.rating }}</p>
+      <p style="margin: -1;"><strong>Bio:</strong> {{ staff_member.bio }}</p>
+    </div>
+  </div>
+{% endfor %}
 
-    </form>
+
+
+
+
+<button type="submit" class="btn btn-primary text-white mt-3 fPersian rounded-pill ">
+  Submit
+</button>
+</form>
+</div>
 </div>
 
 {% else %}
 
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5">
-    <h1 class="p-2  me-3">First Sign in!</h1>
-    <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
+<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
+  <h1 class="p-2 me-3">First Sign in!</h1>
+  <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
 </div>
 
-{% endif %}
-
-
-{% endblock %}
+{% endif %} {% endblock %}

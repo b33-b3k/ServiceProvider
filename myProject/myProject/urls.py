@@ -25,6 +25,7 @@ urlpatterns = [
     #importing other app urls
     path('admin/', include('admin_management.urls')),
         path('booking/', include('booking.urls')),
+        
 
             path('appointments/', include('appointments.urls')), 
 

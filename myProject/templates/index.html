@@ -47,8 +47,8 @@
     <div class="hero_area">
       <!-- header section strats -->
       <header class="header_section">
-        <div class="header_top">
-          <div class="container-fluid">
+        {% comment %} <div class="header_top">
+          {% comment %} <div class="container-fluid">
             {% comment %} <div class="contact_nav">
               <a href="">
                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -58,9 +58,9 @@
                 <i class="fa fa-envelope" aria-hidden="true"></i>
                 <span> Email : services@ServiceEase.com </span>
               </a>
-            </div> {% endcomment %}
-          </div>
-        </div>
+            </div>
+          </div> 
+        </div> {% endcomment %}
         <div class="header_bottom">
           <div class="container-fluid">
             <nav class="navbar navbar-expand-lg custom_nav-container">
@@ -98,10 +98,10 @@
                       >Contact Us</a
                     >
                     <li class="nav-item">
-    <a class="nav-link" href="{% url 'register' %}">
-        <button type="button" class="btn btn-primary rounded-pill py-2 px-4">Login/Signup</button>
-    </a>
-</li>
+                    <a class="nav-link" href="{% url 'register' %}">
+                    <button type="button" class="btn btn-primary rounded-pill py-2 px-4">Login/Signup</button>
+                     </a>
+                    </li>
 
                 </ul>
               </div>

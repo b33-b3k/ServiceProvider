@@ -107,8 +107,8 @@
                 <img src="{% static 'images/s2.png' %}" alt="" />
               </div>
              <div class="detail-box" onclick="redirectToPage()">
-    <h5>Electrical</h5>
-    <p>when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
+            <h5>Electrical</h5>
+            <p>when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
 </div>
 
 <script>
@@ -138,14 +138,14 @@
                 </p>
               </div>
               <script>
-    function redirectToPage() {
-        {% if user.is_authenticated %}
-            window.location.href = "{% url 'booking' %}";
+                function redirectToPage() {
+                {% if user.is_authenticated %}
+                  window.location.href = "{% url 'booking' %}";
 
           
-        {% else %}
-            window.location.href = "{% url 'login' %}";
-        {% endif %}
+                  {% else %}
+                      window.location.href = "{% url 'login' %}";
+                  {% endif %}
     }
 </script>
             </div>

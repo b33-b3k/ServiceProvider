@@ -3,35 +3,60 @@ from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
 
+
+def become_vendor(request):
+    return render(request,"become_vendor.html")
+
+
+def dashboard_vendor(request):
+    return render(request,"vendordashBoard.html")
+
 def index(request):
     return render(request, "indexx.html",{})
 
 def booking(request):
-    #Calling 'validWeekday' Function to Loop days you want in the next 21 days:
     weekdays = validWeekday(22)
-
-    #Only show the days that are not full:
     validateWeekdays = isWeekdayValid(weekdays)
-    
+    time = ""  # Format 'time' variable to HH:MM:SS
+    address = ""  # Add this line to include address in the context
 
     if request.method == 'POST':
         service = request.POST.get('service')
         day = request.POST.get('day')
-        if service == None:
+        time = request.POST.get('time')
+        address = request.POST.get('address')
+
+        
+     
+        print("Service: ", service)
+        print("Day: ", day)
+        print("Time: ", time)
+        print("Address: ", address)
+     
+
+        
+
+
+
+        if service is None:
             messages.success(request, "Please Select A Service!")
             return redirect('booking')
 
-        #Store day and service in django session:
         request.session['day'] = day
         request.session['service'] = service
+        request.session['time'] = time
+        request.session['address'] = address
 
         return redirect('bookingSubmit')
 
 
     return render(request, 'booking.html', {
-            'weekdays':weekdays,
-            'validateWeekdays':validateWeekdays,
-        })
+    'weekdays': weekdays,
+    'validateWeekdays': validateWeekdays,
+    'time': time,  # Add this line to include time in the context
+    'address': address  # Add this line to include address in the context
+})
+
 
 def bookingSubmit(request):
     user = request.user
@@ -47,6 +72,7 @@ def bookingSubmit(request):
     #Get stored data from django session:
     day = request.session.get('day')
     service = request.session.get('service')
+    staff_members = Staff.objects.all() 
     
     #Only show the time of the day that has not been selected before:
     hour = checkTime(times, day)
@@ -57,7 +83,7 @@ def bookingSubmit(request):
         if service != None:
             if day <= maxDate and day >= minDate:
                 if date == 'Monday' or date == 'Tuesday' or date == 'Wednesday' or date == 'Thrusday' or date == 'Friday':
-                    if Appointment.objects.filter(day=day).count() < 11:
+                    if Appointment.objects.filter(day=day).count() < 7:
                         if Appointment.objects.filter(day=day, time=time).count() < 1:
                             AppointmentForm = Appointment.objects.get_or_create(
                                 user = user,
@@ -79,8 +105,8 @@ def bookingSubmit(request):
             messages.success(request, "Please Select A Service!")
 
 
-    return render(request, 'bookingSubmit.html', {
-        'times':hour,
+    return render(request, 'bookingSubmit.html' ,{
+        'times':hour,'staff':staff_members
     })
 
 def userPanel(request):
