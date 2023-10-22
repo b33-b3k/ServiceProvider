@@ -50,6 +50,8 @@ def register_view(request):
         return HttpResponse("Method Not Allowed", status=405)  # Return an HTTP 405 Method Not Allowed for unsupported methods
 
 
+def loginn(request):
+    return render(request, 'choose_login.html')
 
 def login_view(request):
     if request.method == 'GET':
@@ -74,7 +76,7 @@ def login_view(request):
                 return redirect('booking')  # Redirect to the home page after successful login
             else:
                 messages.error(request, "Invalid email or password. Please try again.")
-                return redirect('login')  # Redirect back to the login page if the authentication fails
+                return redirect('login-user')  # Redirect back to the login page if the authentication fails
         else:
             messages.error(request, "User with the provided email does not exist. Please try again.")
             return redirect('login')  # Redirect back to the login page if the user does not exist

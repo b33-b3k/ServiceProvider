@@ -28,23 +28,27 @@
     </div>
   </div>
 {% endfor %} {% endcomment %}
+
 {% for staff_member in staff %}
-  <div class="card border-primary custom-card mb-3" style="width: 100%;">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <h2>{{ staff_member.name }}</h2>
-      {% if staff_member.tier == 'Gold' %}
-        <i class="fas fa-star" style="color: gold;"></i>
-      {% endif %}
+<div class="d-flex justify-content-center">
+    <div class="card border-primary custom-card mb-3" style="width: 50%;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>{{ staff_member.name }}</h2>
+            {% if staff_member.tier == 'Gold' %}
+                <i class="fas fa-star" style="color: gold;"></i>
+            {% endif %}
+        </div>
+        <div class="card-body" style="display: flex; flex-direction: column; text-align: left;">
+            <p style="margin: -1;"><strong>Contact Information:</strong> {{ staff_member.contact_information }}</p>
+            <p style="margin: -1;"><strong>Tier:</strong> {{ staff_member.tier }}</p>
+            <p style="margin: -1;"><strong>Service:</strong> {{ staff_member.service }}</p>
+            <p style="margin: -1;"><strong>Experience:</strong> {{ staff_member.experience }} years</p>
+            <p style="margin: -1;"><strong>Rating:</strong> {{ staff_member.rating }}</p>
+            <p style="margin: -1;"><strong>Bio:</strong> {{ staff_member.bio }}</p>
+        </div>
     </div>
-    <div class="card-body" style="display: flex; flex-direction: column; text-align: left;">
-      <p style="margin: -1;"><strong>Contact Information:</strong> {{ staff_member.contact_information }}</p>
-      <p style="margin: -1;"><strong>Tier:</strong> {{ staff_member.tier }}</p>
-      <p style="margin: -1;"><strong>Service:</strong> {{ staff_member.service }}</p>
-      <p style="margin: -1;"><strong>Experience:</strong> {{ staff_member.experience }} years</p>
-      <p style="margin: -1;"><strong>Rating:</strong> {{ staff_member.rating }}</p>
-      <p style="margin: -1;"><strong>Bio:</strong> {{ staff_member.bio }}</p>
-    </div>
-  </div>
+</div>
+
 {% endfor %}
 
 

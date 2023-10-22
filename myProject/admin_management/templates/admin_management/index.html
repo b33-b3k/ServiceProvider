@@ -1,3 +1,123 @@
-<html>
-  this is dashboard for admin
-  </html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Bootstrap Dashboard</title>
+  </head>
+  <body>
+    {% if user.is_authenticated %}
+    <!-- check if he is admin-->
+    {% if user.is_superuser %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-2 bg-dark" style="height: 100vh">
+          <div class="p-3 text-white">Sidebar Logo</div>
+          <ul class="nav flex-column">
+            <li class="nav-item" style="margin-bottom: 10px">
+              <a class="nav-link text-white" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item" style="margin-bottom: 10px">
+              <a class="nav-link text-white" href="#">Reports</a>
+            </li>
+            <li class="nav-item" style="margin-bottom: 10px">
+              <a class="nav-link text-white" href="#">Analytics</a>
+            </li>
+          </ul>
+        </div>
+        <!-- Content -->
+        <div class="col">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Sidebar Logo</a>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link disabled"
+                      href="#"
+                      tabindex="-1"
+                      aria-disabled="true"
+                      >Disabled</a
+                    >
+                  </li>
+                </ul>
+                <div class="d-flex">
+                  <hr class="dropdown-divider" />
+                  <button class="btn btn-outline-primary" type="submit">
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </nav>
+          <div class="p-3">
+            <h1>Welcome to the Dashboard</h1>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+              ultrices, ligula eu cursus volutpat, augue justo varius felis, sed
+              vestibulum justo magna sit amet mauris.
+            </p>
+          </div>
+          <div class="row p-3">
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Card 1</h5>
+                  <p class="card-text">This is some text within a card body.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Card 2</h5>
+                  <p class="card-text">This is some text within a card body.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Card 3</h5>
+                  <p class="card-text">This is some text within a card body.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {%else%}
+    <h1>Not admin</h1>
+    {% endif %} {% else %}
+    <h1>Not logged in</h1>
+    {% endif %}
+  </body>
+</html>

@@ -12,7 +12,7 @@ def dashboard_vendor(request):
     return render(request,"vendordashBoard.html")
 
 def index(request):
-    return render(request, "indexx.html",{})
+    return render(request, "vendordashBoard.html",{})
 
 def booking(request):
     weekdays = validWeekday(22)
@@ -204,18 +204,7 @@ def userUpdateSubmit(request, id):
         'id': id,
     })
 
-def staffPanel(request):
-    today = datetime.today()
-    minDate = today.strftime('%Y-%m-%d')
-    deltatime = today + timedelta(days=21)
-    strdeltatime = deltatime.strftime('%Y-%m-%d')
-    maxDate = strdeltatime
-    #Only show the Appointments 21 days from today
-    items = Appointment.objects.filter(day__range=[minDate, maxDate]).order_by('day', 'time')
 
-    return render(request, 'staffPanel.html', {
-        'items':items,
-    })
 
 def dayToWeekday(x):
     z = datetime.strptime(x, "%Y-%m-%d")

@@ -40,8 +40,8 @@ class Staff(models.Model):
     bio = models.TextField()
     experience = models.IntegerField()
     rating = models.FloatField()
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
-    price = models.DecimalField(decimal_places=2, max_digits=8)
+    # image = models.ImageField(upload_to='images/', null=True, blank=True)
+    # price = models.DecimalField(decimal_places=2, max_digits=8)
 
     def __str__(self):
         return f"{self.name} | {self.tier} | {self.contact_number} | {self.rating}"

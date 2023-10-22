@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2befwuch&ue__$eibf)6p)_xdkzs^!8i893gb31+4hv=dv4h50
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -135,11 +135,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'your_email_host'  # Replace with your email host
-EMAIL_USE_TLS = True  # Set to True if your email host uses TLS
-EMAIL_PORT = 587  # Replace with the appropriate port for your email host
-EMAIL_HOST_USER = 'your_email_username'  # Replace with your email username
-EMAIL_HOST_PASSWORD = 'your_email_password'  # Replace with your email password
