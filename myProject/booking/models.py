@@ -2,6 +2,9 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 
+
+
+
 SERVICE_CHOICES = (
     ("Electrician", "Electrician"),
     ("Plumber", "Plumber"),
@@ -30,7 +33,6 @@ class Appointment(models.Model):
         return f"{self.user.username} | day: {self.day} | time: {self.time}"
 
 
-from django.db import models
 
 class Staff(models.Model):
     name = models.CharField(max_length=100)
@@ -46,3 +48,25 @@ class Staff(models.Model):
     def __str__(self):
         return f"{self.name} | {self.tier} | {self.contact_number} | {self.rating}"
 
+class VendorRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    business_name = models.CharField(max_length=255)
+    business_address = models.TextField()
+    
+    contact_number = models.CharField(max_length=15)
+    email = models.EmailField()
+    business_description = models.TextField()
+    business_category = models.CharField(max_length=255)
+    pan_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.user.username} | {self.business_name} | {self.business_category} | {self.pan_number}"
+
+
+    
+
+   
+
+    
+
+    

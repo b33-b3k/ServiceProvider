@@ -2,10 +2,48 @@ from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
+from .models import VendorRequest  # Import your model class
 
+from .forms import *
+
+
+
+def vendor_requests_view(request):
+    vendor_requests = VendorRequest.objects.all()
+    return render(request, 'admindashBoard.html', {'items': vendor_requests})
 
 def become_vendor(request):
-    return render(request,"become_vendor.html")
+    print(request.POST)
+
+    if request.method == 'POST':
+        business_name = request.POST.get('business_name')
+        business_address = request.POST.get('business_address')
+        contact_number = request.POST.get('contact_number')
+        email = request.POST.get('email')
+        business_description = request.POST.get('business_description')
+        business_category = request.POST.get('business_category')
+        pan_number = request.POST.get('pan_number')
+
+        # Check if required fields are not empty
+        if not business_name or not business_address or not contact_number:
+            messages.error(request, 'Please fill out all required fields.')
+        else:
+            # Create and save the VendorRequest instance
+            vendor_request = VendorRequest(
+                user=request.user,  # Assign the current user
+                business_name=business_name,
+                business_address=business_address,
+                contact_number=contact_number,
+                email=email,
+                business_description=business_description,
+                business_category=business_category,
+                pan_number=pan_number,
+            )
+            vendor_request.save()
+            messages.success(request, 'Vendor request submitted successfully.')
+            return redirect('booking')  # Redirect to a success view or page
+
+    return render(request, 'become_vendor.html')
 
 
 def dashboard_vendor(request):

@@ -1,0 +1,16 @@
+<!-- vendor_request_list.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vendor Requests</title>
+  </head>
+  <body>
+    <h1>Vendor Requests</h1>
+    <ul>
+      {% for request in vendor_requests %}
+      <li>{{ request.business_name }} - {{ request.business_category }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

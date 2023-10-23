@@ -111,24 +111,27 @@
 <div class="container mt-5">
     <h1 class="mb-4">Vendor Requests</h1>
 
-    <!-- Loop through each vendor request. This is just a placeholder; you'll use Django's template syntax to loop through the requests. -->
+{% if vendor_requests %}
+<div class="row">
+            {% for vendor_request in vendor_requests %}
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">Vendor Name</h5>
-            <p class="card-text">Vendor details or any additional information here.</p>
+            <h5 class="card-title">{{ business_name }}</h5>
+            <p class="card-text">{{ request.business_description }}</p>
+            
+            <!-- Display other fields as needed -->
             <button class="btn btn-success">Accept</button>
             <button class="btn btn-danger">Reject</button>
         </div>
     </div>
+  {% endfor %}
+</div>
+{% else %}
+<p>No vendor requests available.</p>
+{% endif %}
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Vendor Name</h5>
-            <p class="card-text">Vendor details or any additional information here.</p>
-            <button class="btn btn-success">Accept</button>
-            <button class="btn btn-danger">Reject</button>
-        </div>
-    </div>
+
+    
 
     <!-- End of loop -->
 

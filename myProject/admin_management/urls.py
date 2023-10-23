@@ -11,6 +11,7 @@ urlpatterns = [
 
     #dashboard
     path('dashboard-admin/', views.dashboard_view, name='admin-dashboard'),
+    
     # path('staff-panel/', views.staffPanel, name='staff-panel'),
     
 

@@ -10,7 +10,12 @@ from django.contrib import messages
 from datetime import datetime, timedelta
 from booking.models import Appointment
 from django.contrib.auth.decorators import login_required
+from booking.models import VendorRequest
 
+
+def vendor_requests_view(request):
+    vendor_requests = VendorRequest.objects.all()
+    return render(request, 'admindashBoard.html', {'items': vendor_requests})
 
 def manage_service_providers(request):
     service_providers = ServiceProvider.objects.all()  # Retrieve all service providers from the database
