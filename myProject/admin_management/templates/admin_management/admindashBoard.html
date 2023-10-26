@@ -8,6 +8,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
       /* Hide all content sections by default */
       .content-section {
@@ -22,46 +24,37 @@
     <div class="container-fluid">
       <div class="row">
         <!-- Sidebar -->
-        <div class="col-2 bg-dark" style="height: 100vh">
-          <div class="p-3 text-white" style="margin-bottom: 30px">
-            <a
-              class="nav-link text-white text-center fs-2"
-              href="#"
-              data-target="default-section"
-              >
-              <p>Admin</p>
-            
-            <a />
-          </div>
-          <ul class="nav flex-column">
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="appointments-section"
-                >Total Users</a
-              >
-            </li>
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="delivered-section"
-                >Vendor Request</a
-              >
-            </li>
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="inquiry-section"
-                >Vendors</a
-              >
-            </li>
-            <li class="nav-item" style="margin-top: 440px">
-              <a class="nav-link text-white" href="#">Logout</a>
-            </li>
-          </ul>
+           <div class="col-2 bg-dark" style="height: 100vh; padding: 0;">
+            <div class="p-3 text-white text-center" style="background-color: #333; border-bottom: 1px solid #555;">
+                <h2>Admin</h2>
+            </div>
+            <ul class="nav flex-column p-2">
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white d-flex align-items-center" href="#" data-target="default-section">
+                        <i class="bi bi-house-door me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white d-flex align-items-center" href="#" data-target="appointments-section">
+                        <i class="bi bi-people me-2"></i> Total Users
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white d-flex align-items-center" href="#" data-target="delivered-section">
+                        <i class="bi bi-box-arrow-in-down me-2"></i> Vendor Request
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white d-flex align-items-center" href="#" data-target="inquiry-section">
+                        <i class="bi bi-shop me-2"></i> Vendors
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-white d-flex align-items-center" href="#">
+                        <i class="bi bi-box-arrow-left me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
         </div>
         <!-- Content -->
         <div class="col">
@@ -70,7 +63,7 @@
             <!-- ... Content specific to Total Users ... -->
           <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
     <h1 class="text-center mt-5 mb-5">User Lists</h1>
-    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Appointment">
+    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Users">
     <br>
     
     <div class="table-responsive">
@@ -78,22 +71,21 @@
           <thead>
             <tr>
               <th class="text-center" scope="col">Name</th>
-              <th class="text-center" scope="col"> Address</th>
+              <th class="text-center" scope="col"> Email</th>
            
-              <th class="text-center" scope="col">Phone Number</th>
               <th class="text-center" scope="col">Date Joined</th>
-              <th class="text-center" scope="col">Is Staff</th>
-              <th class="text-center" scope="col">Is Superuser</th>
+              <th class="text-center" scope="col">Is Vendor</th>
 
             </tr>
           </thead>
           <tbody id="myTable">
-              {% for item in items %}
+              {% for user in users %}
             <tr>
-              <td class="text-center">{{item.time}}</td>
-              <td class="text-center">{{item.user.username}}</td>
-              <td class="text-center">{{item.service}}</td>
-              <td class="text-center">{{item.day}}</td>
+              <td class="text-center">{{user.username}}</td>
+              <td class="text-center">{{user.email}}</td>
+
+              <td class="text-center">{{user.date_joined}}</td>
+              <td class="text-center">{{user.is_staff}}</td>
             </tr>
               {% endfor %}
           </tbody>
@@ -112,22 +104,38 @@
     <h1 class="mb-4">Vendor Requests</h1>
 
 {% if vendor_requests %}
-<div class="row">
-            {% for vendor_request in vendor_requests %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ business_name }}</h5>
-            <p class="card-text">{{ request.business_description }}</p>
-            
-            <!-- Display other fields as needed -->
-            <button class="btn btn-success">Accept</button>
-            <button class="btn btn-danger">Reject</button>
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for vendor_request in vendor_requests %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ vendor_request.business_name }}</h5>
+                    <p class="card-text">{{ vendor_request.business_description }}</p>
+                    <p class="card-text"><small class="text-muted">{{ vendor_request.user.username }}</small></p>
+                    {% comment %} <a href="#" class="btn btn-primary">View Details</a> {% endcomment %}
+                    
+                    
+                </div>
+                <div class="card-footer bg-white">
+                    <button class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Accept
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Reject
+                    </button>
+                </div>
+            </div>
         </div>
+        {% endfor %}
     </div>
-  {% endfor %}
 </div>
 {% else %}
-<p>No vendor requests available.</p>
+<div class="container mt-5">
+    <div class="alert alert-info text-center">
+        No vendor requests available.
+    </div>
+</div>
 {% endif %}
 
 
@@ -144,27 +152,33 @@
             <!-- ... Content specific to Vendors ... -->
             <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
     <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
-    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Vendors">
+    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput2" type="text" placeholder="Search Vendors">
     <br>
     
     <div class="table-responsive">
       <table class="table table-bordered table-striped table-hover mx-auto">
           <thead>
             <tr>
-              <th class="text-center" scope="col">Time</th>
-              <th class="text-center" scope="col"> Name</th>
+              <th class="text-center" scope="col">Name</th>
+              <th class="text-center" scope="col"> Contact_Number</th>
            
+              <th class="text-center" scope="col">Tier</th>
               <th class="text-center" scope="col">Service</th>
-              <th class="text-center" scope="col">Date</th>
+
+
+
             </tr>
           </thead>
           <tbody id="myTable">
               {% for item in items %}
             <tr>
-              <td class="text-center">{{item.time}}</td>
-              <td class="text-center">{{item.user.username}}</td>
+              <td class="text-center">{{item.name}}</td>
+              <td class="text-center">{{item.contact_number}}</td>
+
+              <td class="text-center">{{item.tier}}</td>
               <td class="text-center">{{item.service}}</td>
-              <td class="text-center">{{item.day}}</td>
+
+
             </tr>
               {% endfor %}
           </tbody>
@@ -176,49 +190,43 @@
           </div>
 
           <!-- Default section to be displayed initially (e.g., a welcome message or dashboard overview) -->
-          <div id="default-section">
-            <div class="p-3">
-              <h1>Admin Dashboard</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-                ultrices, ligula eu cursus volutpat, augue justo varius felis,
-                sed vestibulum justo magna sit amet mauris.
-              </p>
-            </div>
-            <div class="row p-3">
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <p class="card-text">
-                      100
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Total Vendors</h5>
-                    <p class="card-text">
-20                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Vendor Request</h5>
-                    <p class="card-text">
-6                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div id="default-section">
+    <div class="p-3">
+        <h1>Welcome to the Admin Dashboard</h1>
+        <p>Manage and oversee the entire system from this central hub.</p>
     </div>
+    <div class="row p-3">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">1,200</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Vendors</h5>
+                    <p class="card-text">350</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Vendor Requests</h5>
+                    <p class="card-text">15</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-3">
+        <h2>User Sign-ups Over Time</h2>
+        <!-- Insert a graphical representation, e.g., a line chart showing user sign-ups over the past months -->
+    </div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -226,6 +234,49 @@
       const links = document.querySelectorAll(".nav-link[data-target]");
       const defaultSection = document.getElementById("default-section");
       const sections = document.querySelectorAll(".content-section");
+
+
+      document.getElementById('myInput').addEventListener('keyup', function() {
+    // Get the value of the input field
+    let filter = this.value.toUpperCase();
+
+    // Get the table rows. Adjust the selector if you're using something other than '#myTable tr'
+    let rows = document.querySelectorAll('#myTable tr');
+
+    // Loop through all table rows and hide those that don't match the search
+    rows.forEach(function(row) {
+        let td = row.getElementsByTagName('td')[0]; // This gets the first column. Adjust if you want to search in another column.
+        if (td) {
+            let txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+});
+      document.getElementById('myInput2').addEventListener('keyup', function() {
+    // Get the value of the input field
+    let filter = this.value.toUpperCase();
+
+    // Get the table rows. Adjust the selector if you're using something other than '#myTable tr'
+    let rows = document.querySelectorAll('#myTable tr');
+
+    // Loop through all table rows and hide those that don't match the search
+    rows.forEach(function(row) {
+        let td = row.getElementsByTagName('td')[0]; // This gets the first column. Adjust if you want to search in another column.
+        if (td) {
+            let txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+});
+
 
       // Event listener for each link
       links.forEach((link) => {
@@ -253,4 +304,5 @@
     <h1>Not logged in</h1>
     {% endif %}
   </body>
+  
 </html>

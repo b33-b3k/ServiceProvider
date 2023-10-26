@@ -1,11 +1,54 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
-from .models import VendorRequest  # Import your model class
+from .models import * # Import your model class
 
 from .forms import *
 
+
+def vendor_dashboard(request):
+    # Fetch appointments associated with the logged-in vendor
+    try:
+        # Fetch appointments associated with the logged-in vendor
+        appointments = Appointment.objects.all()
+        all_vendor_requests = VendorRequest.objects.all()
+
+        print(appointments)
+    except Appointment.DoesNotExist:
+        # Handle the case where no appointments are found for the vendor
+        appointments = []
+    except Exception as e:
+        # Handle other unexpected database errors
+        return HttpResponseBadRequest(f"An error occurred: {e}")
+    context = {
+        'appointments': appointments,
+        'vendor_requests': all_vendor_requests
+    }
+    return render(request, 'vendordashBoard.html', context)
+
+def submit_staff_data(request):
+    print(
+        request.POST.get('name'),
+    )
+    if request.method == 'POST':
+        staff_id = request.POST.get('staff_id')
+        staff_member = Staff.objects.get(id=staff_id)
+        
+        # Create a new appointment
+        appointment = Appointment.objects.create(
+            user=request.user,
+            service=staff_member.service,
+         staff=staff_member.name,
+            status="Pending"
+        )
+
+
+
+        # You can add additional logic here if needed
+
+        return redirect('booking') 
 
 
 def vendor_requests_view(request):
@@ -46,16 +89,18 @@ def become_vendor(request):
     return render(request, 'become_vendor.html')
 
 
-def dashboard_vendor(request):
-    return render(request,"vendordashBoard.html")
+
 
 def index(request):
     return render(request, "vendordashBoard.html",{})
 
+
+
+
 def booking(request):
-    weekdays = validWeekday(22)
+    weekdays = validWeekday(7)
     validateWeekdays = isWeekdayValid(weekdays)
-    time = ""  # Format 'time' variable to HH:MM:SS
+    time = "3 PM"  # Format 'time' variable to HH:MM:SS
     address = ""  # Add this line to include address in the context
 
     if request.method == 'POST':
@@ -69,12 +114,7 @@ def booking(request):
         print("Service: ", service)
         print("Day: ", day)
         print("Time: ", time)
-        print("Address: ", address)
-     
-
-        
-
-
+        print("Address: ", address)   
 
         if service is None:
             messages.success(request, "Please Select A Service!")
@@ -85,6 +125,15 @@ def booking(request):
         request.session['time'] = time
         request.session['address'] = address
 
+         # Save the data to the Appointment model
+        appointment = Appointment.objects.create(
+            user=request.user,
+            service=service,
+            day=day,
+            time=time,
+            staff="Not assigned",
+        )
+
         return redirect('bookingSubmit')
 
 
@@ -94,6 +143,7 @@ def booking(request):
     'time': time,  # Add this line to include time in the context
     'address': address  # Add this line to include address in the context
 })
+
 
 
 def bookingSubmit(request):
@@ -107,29 +157,36 @@ def bookingSubmit(request):
     strdeltatime = deltatime.strftime('%Y-%m-%d')
     maxDate = strdeltatime
 
-    #Get stored data from django session:
+    # Get stored data from django session:
     day = request.session.get('day')
     service = request.session.get('service')
-    staff_members = Staff.objects.all() 
-    
-    #Only show the time of the day that has not been selected before:
-    hour = checkTime(times, day)
+    staff_members = Staff.objects.all()
+
     if request.method == 'POST':
         time = request.POST.get("time")
+        staff_name = request.POST.get('staff_name')
+
+        print(staff_name)
+
+        # Save the staff_name to the session
+
+        # Assuming dayToWeekday is a function you've defined elsewhere
         date = dayToWeekday(day)
 
+        # Create or update the appointment
         if service != None:
             if day <= maxDate and day >= minDate:
                 if date == 'Monday' or date == 'Tuesday' or date == 'Wednesday' or date == 'Thrusday' or date == 'Friday':
-                    if Appointment.objects.filter(day=day).count() < 7:
+                    if Appointment.objects.filter(day=day).count() < 11:
                         if Appointment.objects.filter(day=day, time=time).count() < 1:
-                            AppointmentForm = Appointment.objects.get_or_create(
+                            AppointmentForm = Appointment.objects.filter(user=user).update(
                                 user = user,
                                 service = service,
                                 day = day,
                                 time = time,
-                            )
-                            messages.success(request, "Appointment Saved!")
+                                staff = staff_name,
+                            ) 
+                            messages.success(request, "Appointment Booked!")
                             return redirect('index')
                         else:
                             messages.success(request, "The Selected Time Has Been Reserved Before!")
@@ -142,9 +199,10 @@ def bookingSubmit(request):
         else:
             messages.success(request, "Please Select A Service!")
 
+        return redirect('booking')
 
-    return render(request, 'bookingSubmit.html' ,{
-        'times':hour,'staff':staff_members
+    return render(request, 'bookingSubmit.html', {
+        'times': times, 'staff': staff_members
     })
 
 def userPanel(request):

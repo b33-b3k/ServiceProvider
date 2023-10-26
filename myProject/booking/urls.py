@@ -9,8 +9,12 @@ urlpatterns = [
     path('user-update/<int:id>', views.userUpdate, name='userUpdate'),
     path('user-update-submit/<int:id>', views.userUpdateSubmit, name='userUpdateSubmit'),
     # path('staff-panel', views.staffPanel, name='staffPanel'),
-    path('dashboard-panel', views.dashboard_vendor, name='dashboard-vendor'),
     path('become-vendor', views.become_vendor, name='become-vendor'),
+    path('submit-staff-data/', views.submit_staff_data, name='submit_staff_data'),
+    path('dashboard-panel', views.vendor_dashboard, name='vendorUpdate'),
+
+
+
 
 
 

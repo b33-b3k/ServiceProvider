@@ -1,251 +1,250 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-      /* Hide all content sections by default */
-      .content-section {
-        display: none;
-      }
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .nav-link {
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #007bff;
+        }
+
+        .content-section {
+            transition: opacity 0.3s;
+        }
+
+        .card {
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+        }
     </style>
 
     <title>Vendor Dashboard</title>
-  </head>
-  <body>
+</head>
+
+<body>
     {% if user.is_authenticated %}
     <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar -->
-        <div class="col-2 bg-dark" style="height: 100vh">
-          <div class="p-3 text-white" style="margin-bottom: 30px">
-            <a
-              class="nav-link text-white text-center fs-2"
-              href="#"
-              data-target="default-section"
-              >
-              <p>Vendor</p>
-            
-            <a />
-          </div>
-          <ul class="nav flex-column">
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="appointments-section"
-                >Appointments</a
-              >
-            </li>
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="delivered-section"
-                >Delivered</a
-              >
-            </li>
-            <li class="nav-item" style="margin-bottom: 30px">
-              <a
-                class="nav-link text-white"
-                href="#"
-                data-target="inquiry-section"
-                >Inquiry</a
-              >
-            </li>
-            <li class="nav-item" style="margin-top: 440px">
-              <a class="nav-link text-white" href="#">Logout</a>
-            </li>
-          </ul>
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-4">
+                            <a class="nav-link active text-white" aria-current="page" href="#" data-target="default-section">
+                                <i class="bi bi-house-door-fill me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#" data-target="appointments-section">
+                                <i class="bi bi-calendar-check-fill me-2"></i>
+                                Appointments
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#" data-target="delivered-section">
+                                <i class="bi bi-box-arrow-in-down me-2"></i>
+                                Delivered
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#" data-target="inquiry-section">
+                                <i class="bi bi-shop me-2"></i>
+                                Vendors
+                            </a>
+                        </li>
+                        <li class="nav-item mt-auto">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-box-arrow-left me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Appointments Section -->
+               <div id="appointments-section" class="content-section mt-5">
+    <div class="container">
+        <h1 class="mb-4">Appointments</h1>
+        {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Day</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Staff name</th>
+                        <th>Service</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.day }}</td>
+                        <td>{{ appointment.user }}</td>
+                        <td>{{ appointment.user.email }}</td>
+                        <td>{{ appointment.staff }}</td>
+                        <td>{{ appointment.service }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'vendorUpdate' %}">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <!-- Content -->
-        <div class="col">
-          <!-- Total Users Section -->
-          <div id="appointments-section" class="content-section">
-            <!-- ... Content specific to Total Users ... -->
-          <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
-    <h1 class="text-center mt-5 mb-5">User Lists</h1>
-    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Appointment">
-    <br>
-    
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover mx-auto">
-          <thead>
-            <tr>
-              <th class="text-center" scope="col">Name</th>
-              <th class="text-center" scope="col"> Address</th>
-           
-              <th class="text-center" scope="col">Phone Number</th>
-              <th class="text-center" scope="col">Date Joined</th>
-              <th class="text-center" scope="col">Is Staff</th>
-              <th class="text-center" scope="col">Is Superuser</th>
-
-            </tr>
-          </thead>
-          <tbody id="myTable">
-              {% for item in items %}
-            <tr>
-              <td class="text-center">{{item.time}}</td>
-              <td class="text-center">{{item.user.username}}</td>
-              <td class="text-center">{{item.service}}</td>
-              <td class="text-center">{{item.day}}</td>
-            </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
+        {% else %}
+        <div class="alert alert-info">
+            No appointments available.
+        </div>
+        {% endif %}
+    </div>
 </div>
 
-          </div>
 
-          <!-- Delivered Section -->
-          <div id="delivered-section" class="content-section">
-            <!-- ... Content specific to Vendor Request ... -->
-            
-<div class="container mt-5">
-    <h1 class="mb-4">Delivered</h1>
-
-    <!-- Loop through each vendor request. This is just a placeholder; you'll use Django's template syntax to loop through the requests. -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Vendor Name</h5>
-            <p class="card-text">Vendor details or any additional information here.</p>
-        
+                <!-- Delivered Section -->
+               <div id="delivered-section" class="content-section mt-5">
+    <div class="container">
+        <h1 class="mb-4">Delivered</h1>
+        {% if vendor_requests %}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Business Name</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>PAN Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendor_request in vendor_requests %}
+                    <tr>
+                        <td>{{ vendor_request.business_name }}</td>
+                        <td>{{ vendor_request.business_address }}</td>
+                        <td>{{ vendor_request.contact_number }}</td>
+                        <td>{{ vendor_request.email }}</td>
+                        <td>{{ vendor_request.business_description }}</td>
+                        <td>{{ vendor_request.business_category }}</td>
+                        <td>{{ vendor_request.pan_number }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Vendor Name</h5>
-            <p class="card-text">Vendor details or any additional information here.</p>
-            
+        {% else %}
+        <div class="alert alert-info">
+            No delivered items available.
         </div>
+        {% endif %}
     </div>
-
-    <!-- End of loop -->
-
 </div>
 
-          </div>
-
-          <!-- Inquiry Section -->
-          
-          <div id="inquiry-section" class="content-section">
-            <!-- ... Content specific to Vendors ... -->
-            <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
-    <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
-    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Vendors">
-    <br>
-    
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover mx-auto">
-          <thead>
-            <tr>
-              <th class="text-center" scope="col">Time</th>
-              <th class="text-center" scope="col"> Name</th>
-           
-              <th class="text-center" scope="col">Service</th>
-              <th class="text-center" scope="col">Date</th>
-            </tr>
-          </thead>
-          <tbody id="myTable">
-              {% for item in items %}
-            <tr>
-              <td class="text-center">{{item.time}}</td>
-              <td class="text-center">{{item.user.username}}</td>
-              <td class="text-center">{{item.service}}</td>
-              <td class="text-center">{{item.day}}</td>
-            </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-  </div>
-
-          </div>
-
-          <!-- Default section to be displayed initially (e.g., a welcome message or dashboard overview) -->
-          <div id="default-section">
-            <div class="p-3">
-              <h1>Vendor Dashboard</h1>
-              <p>
-                This is the default section that will be displayed when the
-                page loads.
-              </p>
-            </div>
-            <div class="row p-3">
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <p class="card-text">
-                      100
-                    </p>
-                  </div>
+                <!-- Vendors Section -->
+                <div id="inquiry-section" class="content-section mt-5">
+                    <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
+                    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Vendors">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover mx-auto">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">Time</th>
+                                    <th class="text-center" scope="col"> Name</th>
+                                    <th class="text-center" scope="col">Service</th>
+                                    <th class="text-center" scope="col">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                {% for item in items %}
+                                <tr>
+                                    <td class="text-center">{{item.time}}</td>
+                                    <td class="text-center">{{item.user.username}}</td>
+                                    <td class="text-center">{{item.service}}</td>
+                                    <td class="text-center">{{item.day}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Total Vendors</h5>
-                    <p class="card-text">
-20                    </p>
-                  </div>
+                
+
+                <!-- Default Section -->
+                <div id="default-section" class="mt-5">
+                    <h1>Welcome to the Vendor Dashboard</h1>
+                    <p>From here, you can manage all your appointments, view delivered orders, and interact with other vendors. Use the navigation on the left to get started.</p>
                 </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Appointments</h5>
-                    <p class="card-text">
-6                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            </main>
         </div>
-      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // Get all sidebar links
-      const links = document.querySelectorAll(".nav-link[data-target]");
-      const defaultSection = document.getElementById("default-section");
-      const sections = document.querySelectorAll(".content-section");
+        // Get all sidebar links
+        const links = document.querySelectorAll(".nav-link[data-target]");
+        const defaultSection = document.getElementById("default-section");
+        const sections = document.querySelectorAll(".content-section");
 
-      // Event listener for each link
-      links.forEach((link) => {
-        link.addEventListener("click", function (e) {
-          e.preventDefault(); // Prevent default link behavior
+        // Event listener for each link
+        links.forEach((link) => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault(); // Prevent default link behavior
 
-          // Hide all sections including default
-          sections.forEach((section) => {
-            section.style.display = "none";
-          });
-          defaultSection.style.display = "none";
+                // Hide all sections including default
+                sections.forEach((section) => {
+                    section.style.display = "none";
+                });
+                defaultSection.style.display = "none";
 
-          // Show the targeted section
-          const target = link.getAttribute("data-target");
-          const targetSection = document.getElementById(target);
-          if (targetSection) {
-            targetSection.style.display = "block";
-          } else {
-            defaultSection.style.display = "block";
-          }
+                // Show the targeted section
+                const target = link.getAttribute("data-target");
+                const targetSection = document.getElementById(target);
+                if (targetSection) {
+                    targetSection.style.display = "block";
+                } else {
+                    defaultSection.style.display = "block";
+                }
+            });
         });
-      });
     </script>
     {% else %}
     <h1>Not logged in</h1>
     {% endif %}
-  </body>
+</body>
+
 </html>

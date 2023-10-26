@@ -8,14 +8,14 @@ from .models import ServiceProvider, Tier
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from datetime import datetime, timedelta
-from booking.models import Appointment
+from booking.models import Appointment, Staff
 from django.contrib.auth.decorators import login_required
 from booking.models import VendorRequest
 
+from django.contrib.auth.models import User
 
-def vendor_requests_view(request):
-    vendor_requests = VendorRequest.objects.all()
-    return render(request, 'admindashBoard.html', {'items': vendor_requests})
+
+
 
 def manage_service_providers(request):
     service_providers = ServiceProvider.objects.all()  # Retrieve all service providers from the database
@@ -70,7 +70,26 @@ def admin_login(request):
 
 
 def dashboard_view(request):
-    return render(request, 'admin_management/adminDashboard.html')
+    vendor_requests = VendorRequest.objects.all()
+    all_users = User.objects.all()
+
+    try:
+        vendor_data=Staff.objects.all()
+    except Exception as e:
+        print("Error",e)
+
+        
+
+
+
+    context={
+        'vendor_requests':vendor_requests,
+        'items':vendor_data,
+        'users':all_users
+    }
+   
+
+    return render(request, 'admin_management/adminDashboard.html',context)
 
 def staffPanel(request):
     today = datetime.today()

@@ -1,8 +1,6 @@
-<title>User Panel</title>
-{% extends 'layout.html' %} 
-{% load static %}
- {% block body %}
- {% if user.is_authenticated %}
+<title>User Panel</title>{% extends 'layout.html' %} 
+{% load static %} {% block body %}
+{% if user.is_authenticated %}
 <h1 class="ms-5 mt-5">User Panel</h1>
 
 <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
@@ -13,10 +11,6 @@
     <li class="list-group mt-2">Date Joined: {{ user.date_joined }}</li>
     <li class="list-group mt-2">Is Staff: {{ user.is_staff }}</li>
     <li class="list-group mt-2">Is Superuser: {{ user.is_superuser }}</li>
-
-    
-    
-    
   </ul>
 </div>
 
