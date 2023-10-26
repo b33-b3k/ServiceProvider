@@ -9,7 +9,7 @@ urlpatterns = [
 
     # Account
     path('login/', views.login_view, name='login.html'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='appointments/account/logout.html'), name='logout'),
+    # path('logout/', auth_views.LogoutView.as_view(template_name='appointments/account/logout.html'), name='logout'),
     # path('wait-approval/', views.wait_approval_view, name='wait_approval.html'), # no need for this
     # Reset password
 #     path('reset_password/',

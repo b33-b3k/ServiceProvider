@@ -2,9 +2,9 @@
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
-from django.shortcuts import render, redirect
+from django.http import Http404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from .models import ServiceProvider, Tier
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from datetime import datetime, timedelta
@@ -17,17 +17,68 @@ from django.contrib.auth.models import User
 
 
 
-def manage_service_providers(request):
-    service_providers = ServiceProvider.objects.all()  # Retrieve all service providers from the database
-    return render(request, 'admin_management/manage_service_providers.html', {'service_providers': service_providers})
-
-def manage_tiers(request):
-    tiers = Tier.objects.all()  # Retrieve all tiers from the database
-    return render(request, 'admin_management/manage_tiers.html', {'tiers': tiers})
 
 def index(request):
     return render(request, 'admin_management/index.html')
 
+def reject_vendor_request(request, vendor_name):
+    # Retrieve all vendor requests with the given name
+    vendor_requests = VendorRequest.objects.filter(business_name=vendor_name)
+
+    # If there's only one match, delete it
+    if vendor_requests.count() == 1:
+        vendor_request = vendor_requests.first()
+        vendor_request.delete()
+        return redirect('admin-dashboard')
+
+    # If there are multiple matches, handle them
+    elif vendor_requests.count() > 1:
+        vendor_request = vendor_requests.first()
+        vendor_request.delete()
+        return redirect('admin-dashboard')
+        # For now, we'll just raise an error. You might want to handle this differently.
+
+    # If there's no match, show a 404 error
+    else:
+        raise Http404("VendorRequest not found")
+
+def accept_vendor_request(request, vendor_name):
+    # Retrieve all vendor requests with the given name
+    vendor_requests = VendorRequest.objects.filter(business_name=vendor_name)
+
+    # If there's only one match, process it
+    if vendor_requests.count() == 1:
+        vendor_request = vendor_requests.first()
+
+        staff = Staff(
+        name=vendor_request.business_name,
+        contact_number=vendor_request.contact_number,
+        service=vendor_request.business_category,
+        bio=vendor_request.business_description,
+        assigned_user=vendor_request.user,  # Associate the User from VendorRequest to the Staff
+        # ... add other fields as needed ...
+    )
+        staff.save()
+
+    # Delete the vendor request
+        vendor_request.delete()
+
+        
+        # ... (rest of your logic to create Staff and delete VendorRequest) ...
+        return redirect('admin-dashboard')
+
+    # If there are multiple matches, show them to the admin
+    elif vendor_requests.count() > 1:
+        vendor_request = vendor_requests.first()
+        return redirect('admin-dashboard')
+    
+
+
+        
+
+    # If there's no match, show a 404 error
+    else:
+        raise Http404("VendorRequest not found")
 
 # def staffPanel(request):
 #     today = datetime.today()

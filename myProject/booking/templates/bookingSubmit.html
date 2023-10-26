@@ -1,64 +1,83 @@
 <title>Online Booking</title>
-{% extends 'layout.html' %} {% load static %} {% block body %} 
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+    }
+
+    .custom-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    .fas.fa-star {
+        font-size: 24px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004999;
+    }
+</style>
+
 {% if user.is_authenticated %}
+<div class="shadow p-4 mb-5 bg-body rounded text-black m-5">
+    <h1 class="text-center mb-4">Choose Your Provider</h1>
+    <form method="post" action="{% url 'bookingSubmit' %}" class="me-2 ms-2" required>
+        {% csrf_token %}
 
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
-  <form
-    method="post"
-    action="{% url 'bookingSubmit' %}"
-    class="me-2 ms-2"
-    required
-  >
-    {% csrf_token %}
-
-    <!--input time-->
-    <h3 class="text-center fPersian mt-4">Choose your provider:</h3>
-    <!--template for card list-->
-
-{% for staff_member in staff %}
-<div class="d-flex justify-content-center">
-    <div class="card border-primary custom-card mb-3" style="width: 50%;">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>{{ staff_member.name }}</h2>
-            {% if staff_member.tier == 'Gold' %}
-                <i class="fas fa-star" style="color: gold;"></i>
-            {% endif %}
-        </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <p class="mb-0"><strong>Contact Information:</strong> {{ staff_member.contact_information }}</p>
-                <p class="mb-0"><strong>Tier:</strong> {{ staff_member.tier }}</p>
-                <p class="mb-0"><strong>Service:</strong> {{ staff_member.service }}</p>
-                <p class="mb-0"><strong>Experience:</strong> {{ staff_member.experience }} years</p>
-                <p class="mb-0"><strong>Rating:</strong> {{ staff_member.rating }}</p>
+        {% for staff_member in staff %}
+        <div class="d-flex justify-content-center mb-4">
+            <div class="card border-primary custom-card" style="width: 80%;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2>{{ staff_member.name }}</h2>
+                    {% if staff_member.tier == 'Gold' %}
+                    <i class="fas fa-star"></i>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <p><strong>Contact Information:</strong> {{ staff_member.contact_information }}</p>
+                    <p><strong>Tier:</strong> {{ staff_member.tier }}</p>
+                    <p><strong>Service:</strong> {{ staff_member.service }}</p>
+                    <p><strong>Experience:</strong> {{ staff_member.experience }} years</p>
+                    <p><strong>Rating:</strong> {{ staff_member.rating }}</p>
+                    <p><strong>Bio:</strong> {{ staff_member.bio }}</p>
+                </div>
+                <div class="card-footer">
+                    <form method="POST" action="{% url 'submit_staff_data' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="staff_name" value="{{ staff_member.name }}">
+                        <button type="submit" class="btn btn-primary rounded-pill float-end">Choose</button>
+                    </form>
+                </div>
             </div>
-            <p class="mb-0"><strong>Bio:</strong> {{ staff_member.bio }}</p>
         </div>
-        <div class="card-footer">
-            <form method="POST" action="{% url 'submit_staff_data' %}">
-                {% csrf_token %}
-                <input type="hidden" name="staff_name" value="{{ staff_member.name }}">
-                <button type="submit" class="btn btn-primary rounded-pill float-end">Choose</button>
-            </form>
-        </div>
-    </div>
+        {% endfor %}
+    </form>
 </div>
-{% endfor %}
-
-
-
-
-
-
-</form>
-</div>
-</div>
-
 {% else %}
-
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
-  <h1 class="p-2 me-3">First Sign in!</h1>
-  <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
+<div class="shadow p-4 mb-5 bg-body rounded text-black m-5">
+    <h1 class="p-2 me-3">First Sign in!</h1>
+    <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
 </div>
-
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}

@@ -1,4 +1,5 @@
-from django.http import HttpResponseBadRequest
+from django.contrib.auth import logout
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from .models import *
@@ -14,6 +15,7 @@ def vendor_dashboard(request):
         # Fetch appointments associated with the logged-in vendor
         appointments = Appointment.objects.all()
         all_vendor_requests = VendorRequest.objects.all()
+        staffs=Staff.objects.all()
 
         print(appointments)
     except Appointment.DoesNotExist:
@@ -24,31 +26,33 @@ def vendor_dashboard(request):
         return HttpResponseBadRequest(f"An error occurred: {e}")
     context = {
         'appointments': appointments,
-        'vendor_requests': all_vendor_requests
+        'vendor_requests': all_vendor_requests,
+        'items': staffs,
+        
     }
     return render(request, 'vendordashBoard.html', context)
 
 def submit_staff_data(request):
-    print(
-        request.POST.get('name'),
-    )
     if request.method == 'POST':
-        staff_id = request.POST.get('staff_id')
-        staff_member = Staff.objects.get(id=staff_id)
-        
-        # Create a new appointment
-        appointment = Appointment.objects.create(
-            user=request.user,
-            service=staff_member.service,
-         staff=staff_member.name,
-            status="Pending"
-        )
+        staff_name = request.POST.get('staff_name')
+        print(staff_name)
+        try:
+            staff_member = Staff.objects.get(name=staff_name)
+            
+            # Create a new appointment
+            appointment = Appointment.objects.create(
+                user=request.user,
+                service=staff_member.service,
+                staff=staff_member.name,
+            )
+            
+            # You can add additional logic here if needed
 
-
-
-        # You can add additional logic here if needed
-
-        return redirect('booking') 
+            return redirect('booking') 
+        except Staff.DoesNotExist:
+            # Handle the case where no staff with the given name exists
+            # For example, you can return an error message or redirect to another page
+            return HttpResponse("Staff with the given name does not exist.")
 
 
 def vendor_requests_view(request):
@@ -94,13 +98,17 @@ def become_vendor(request):
 def index(request):
     return render(request, "vendordashBoard.html",{})
 
-
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page or some other page
+    return redirect('login') 
 
 
 def booking(request):
+
     weekdays = validWeekday(7)
     validateWeekdays = isWeekdayValid(weekdays)
-    time = "3 PM"  # Format 'time' variable to HH:MM:SS
+    times = [        "3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"]
     address = ""  # Add this line to include address in the context
 
     if request.method == 'POST':
@@ -140,7 +148,7 @@ def booking(request):
     return render(request, 'booking.html', {
     'weekdays': weekdays,
     'validateWeekdays': validateWeekdays,
-    'time': time,  # Add this line to include time in the context
+    'times': times,  # Add this line to include time in the context
     'address': address  # Add this line to include address in the context
 })
 
@@ -212,40 +220,44 @@ def userPanel(request):
         'user':user,
         'appointments':appointments,
     })
-
 def userUpdate(request, id):
     appointment = Appointment.objects.get(pk=id)
-    userdatepicked = appointment.day
-    #Copy  booking:
+    
+    # Convert the appointment.day string to a datetime object
+    userdatepicked = datetime.strptime(appointment.day, '%Y-%m-%d')
+    
+    # Copy booking:
     today = datetime.today()
     minDate = today.strftime('%Y-%m-%d')
 
-    #24h if statement in template:
-    delta24 = (userdatepicked).strftime('%Y-%m-%d') >= (today + timedelta(days=1)).strftime('%Y-%m-%d')
-    #Calling 'validWeekday' Function to Loop days you want in the next 21 days:
+
+    # 24h if statement in template:
+    delta24 = userdatepicked.strftime('%Y-%m-%d') >= (today + timedelta(days=1)).strftime('%Y-%m-%d')
+    
+    # Calling 'validWeekday' Function to Loop days you want in the next 21 days:
     weekdays = validWeekday(22)
 
-    #Only show the days that are not full:
+    # Only show the days that are not full:
     validateWeekdays = isWeekdayValid(weekdays)
     
-
     if request.method == 'POST':
         service = request.POST.get('service')
         day = request.POST.get('day')
 
-        #Store day and service in django session:
+        # Store day and service in django session:
         request.session['day'] = day
         request.session['service'] = service
 
         return redirect('userUpdateSubmit', id=id)
 
-
     return render(request, 'userUpdate.html', {
-            'weekdays':weekdays,
-            'validateWeekdays':validateWeekdays,
+            'weekdays': weekdays,
+            'validateWeekdays': validateWeekdays,
             'delta24': delta24,
             'id': id,
+            
         })
+
 
 def userUpdateSubmit(request, id):
     user = request.user
@@ -270,9 +282,7 @@ def userUpdateSubmit(request, id):
         date = dayToWeekday(day)
 
         if service != None:
-            if day <= maxDate and day >= minDate:
-                if date == 'Monday' or date == 'Tuesday' or date == 'Wednesday' or date == 'Thrusday' or date == 'Friday':
-                    if Appointment.objects.filter(day=day).count() < 11:
+         
                         if Appointment.objects.filter(day=day, time=time).count() < 1 or userSelectedTime == time:
                             AppointmentForm = Appointment.objects.filter(pk=id).update(
                                 user = user,
@@ -284,12 +294,7 @@ def userUpdateSubmit(request, id):
                             return redirect('index')
                         else:
                             messages.success(request, "The Selected Time Has Been Reserved Before!")
-                    else:
-                        messages.success(request, "The Selected Day Is Full!")
-                else:
-                    messages.success(request, "The Selected Date Is Incorrect")
-            else:
-                    messages.success(request, "The Selected Date Isn't In The Correct Time Period!")
+                 
         else:
             messages.success(request, "Please Select A Service!")
         return redirect('userPanel')

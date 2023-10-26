@@ -24,6 +24,8 @@ TIME_CHOICES = (
 )
 
 class Appointment(models.Model):
+    #declare a id
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     service = models.CharField(max_length=50, choices=SERVICE_CHOICES, default="Electrician")
     day= models.CharField(max_length=50, default="Not assigned")
@@ -37,13 +39,33 @@ class Appointment(models.Model):
 
 
 class Staff(models.Model):
+    
     name = models.CharField(max_length=100)
     contact_number = models.CharField(max_length=100)
+    inquiry_message = models.TextField(default="")
+    assigned_user= models.CharField(max_length=100,default="")
+    timestamp = models.DateTimeField(auto_now_add=True,
+                                    auto_now=False,
+                                    blank=True
+
+                                     )
+    
+
+    # email = models.EmailField()
+    # time = models.CharField(max_length=100)
     tier = models.CharField(max_length=50,default="Not assigned")
     service = models.CharField(max_length=100)
-    bio = models.TextField()
-    experience = models.IntegerField()
-    rating = models.FloatField()
+    bio = models.TextField(default='')
+    experience = models.IntegerField(default='1')
+    rating = models.FloatField(default='3')
+    TIER_CHOICES = [
+        ('bronze', 'Bronze'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
+        # ... any other tiers ...
+    ]
+    tier = models.CharField(max_length=10, choices=TIER_CHOICES, default='bronze')
+
     # image = models.ImageField(upload_to='images/', null=True, blank=True)
     # price = models.DecimalField(decimal_places=2, max_digits=8)
 
@@ -67,7 +89,18 @@ class VendorRequest(models.Model):
 
     
 
-   
+class Inquiry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='inquiries')
+    subject = models.CharField(max_length=255)
+    staff_name = models.CharField(max_length=40)
+
+    
+    message = models.TextField()
+    replied = models.BooleanField(default=False)
+    reply_message = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Inquiry from {self.user.username} - {self.subject}"
 
     
 

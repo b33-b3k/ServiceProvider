@@ -112,18 +112,22 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ vendor_request.business_name }}</h5>
                     <p class="card-text">{{ vendor_request.business_description }}</p>
-                    <p class="card-text"><small class="text-muted">{{ vendor_request.user.username }}</small></p>
+                    <p class="card-text">
+                      <small class="text-muted">{{ vendor_request.user.username }}</small><br>
+                      <small class="text-muted">{{ vendor_request.user.email }}</small>
+
+
+
+                    </p>
                     {% comment %} <a href="#" class="btn btn-primary">View Details</a> {% endcomment %}
                     
                     
                 </div>
                 <div class="card-footer bg-white">
-                    <button class="btn btn-success">
-                        <i class="bi bi-check-circle"></i> Accept
-                    </button>
-                    <button class="btn btn-danger">
-                        <i class="bi bi-x-circle"></i> Reject
-                    </button>
+                        <a href="{% url 'accept_vendor_request' vendor_request.business_name %}" class="btn btn-success">Accept</a>
+
+                        <a href="{% url 'reject_vendor_request' vendor_request.business_name %}" class="btn btn-danger">Reject</a>
+
                 </div>
             </div>
         </div>
@@ -148,11 +152,11 @@
           </div>
 
           <!-- Inquiry Section -->
-          <div id="inquiry-section" class="content-section">
+  <div id="inquiry-section" class="content-section">
             <!-- ... Content specific to Vendors ... -->
             <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
-    <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
-    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput2" type="text" placeholder="Search Vendors">
+            <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
+            <input class="form-control form-control-lg fs-3 border border-primary" id="myInput2" type="text" placeholder="Search Vendors">
     <br>
     
     <div class="table-responsive">
@@ -161,27 +165,38 @@
             <tr>
               <th class="text-center" scope="col">Name</th>
               <th class="text-center" scope="col"> Contact_Number</th>
-           
-              <th class="text-center" scope="col">Tier</th>
+              
               <th class="text-center" scope="col">Service</th>
+              <th class="text-center" scope="col">Experience</th>
+              <th class="text-center" scope="col">Tier</th>
 
 
 
             </tr>
           </thead>
-          <tbody id="myTable">
-              {% for item in items %}
-            <tr>
-              <td class="text-center">{{item.name}}</td>
-              <td class="text-center">{{item.contact_number}}</td>
+         <tbody id="myTable">
+    {% for item in items %}
+    <tr>
+        <td class="text-center">{{item.name}}</td>
+        <td class="text-center">{{item.contact_number}}</td>
+        <td class="text-center">{{item.service}}</td>
+        <td class="text-center">{{item.experience}}</td>
+        <td class="text-center">
+            <select class="form-control set-tier" data-user-id="{{ item.id }}">
+                <option value="bronze" {% if item.tier == "bronze" %}selected{% endif %}>Bronze</option>
+                <option value="silver" {% if item.tier == "silver" %}selected{% endif %}>Silver</option>
+                <option value="gold" {% if item.tier == "gold" %}selected{% endif %}>Gold</option>
+                <!-- ... any other tiers ... -->
+            </select>
+        </td>
+        <td class="text-center">
+            <button class="btn btn-danger delete-user" data-user-id="{{ item.id }}">Delete</button>
+            <!-- Add other action buttons as needed -->
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
 
-              <td class="text-center">{{item.tier}}</td>
-              <td class="text-center">{{item.service}}</td>
-
-
-            </tr>
-              {% endfor %}
-          </tbody>
         </table>
       </div>
 

@@ -80,7 +80,7 @@
                             </a>
                         </li>
                         <li class="nav-item mt-auto">
-                            <a class="nav-link text-white" href="#">
+                            <a class="nav-link text-white" href="logout-view">
                                 <i class="bi bi-box-arrow-left me-2"></i>
                                 Logout
                             </a>
@@ -117,7 +117,7 @@
                         <td>{{ appointment.staff }}</td>
                         <td>{{ appointment.service }}</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'vendorUpdate' %}">Edit</a>
+                            <a class="btn btn-primary btn-sm" href="{% url 'userUpdate' appointment.id %}">Edit</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -148,7 +148,6 @@
                         <th>Email</th>
                         <th>Description</th>
                         <th>Category</th>
-                        <th>PAN Number</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,7 +159,6 @@
                         <td>{{ vendor_request.email }}</td>
                         <td>{{ vendor_request.business_description }}</td>
                         <td>{{ vendor_request.business_category }}</td>
-                        <td>{{ vendor_request.pan_number }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -176,32 +174,45 @@
 
                 <!-- Vendors Section -->
                 <div id="inquiry-section" class="content-section mt-5">
-                    <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
-                    <input class="form-control form-control-lg fs-3 border border-primary" id="myInput" type="text" placeholder="Search Vendors">
-                    <br>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover mx-auto">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" scope="col">Time</th>
-                                    <th class="text-center" scope="col"> Name</th>
-                                    <th class="text-center" scope="col">Service</th>
-                                    <th class="text-center" scope="col">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody id="myTable">
-                                {% for item in items %}
-                                <tr>
-                                    <td class="text-center">{{item.time}}</td>
-                                    <td class="text-center">{{item.user.username}}</td>
-                                    <td class="text-center">{{item.service}}</td>
-                                    <td class="text-center">{{item.day}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    
+    <!-- Display list of inquiries -->
+    <div>
+        <h3>All Received Inquiries</h3>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>User</th>
+
+                    <th>Inquiry</th>
+                    <th>Service </th>
+
+                    <th>Date Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in items %}
+                <tr>
+                    <td>{{ inquiry.name }}</td>
+                    <td>{{ inquiry.text }}</td>
+                    <td>{{ inquiry.service }}</td>
+                    <td>{{ inquiry.timestamp }}</td>
+
+                    <td>
+    <a href="" class="btn btn-info btn-sm">View</a>
+    <a href="" class="btn btn-warning btn-sm">Edit</a>
+    <a href="" class="btn btn-danger btn-sm">Delete</a>
+    <a href="" class="btn btn-success btn-sm">Reply</a>
+</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                
                 
 
                 <!-- Default Section -->
