@@ -4,7 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    # path('', views.index, name='index'),
     path('login-admin/', views.admin_login, name='login-admin'),
 
     #dashboard

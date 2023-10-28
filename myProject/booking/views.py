@@ -184,8 +184,7 @@ def bookingSubmit(request):
         # Create or update the appointment
         if service != None:
             if day <= maxDate and day >= minDate:
-                if date == 'Monday' or date == 'Tuesday' or date == 'Wednesday' or date == 'Thrusday' or date == 'Friday':
-                    if Appointment.objects.filter(day=day).count() < 11:
+                
                         if Appointment.objects.filter(day=day, time=time).count() < 1:
                             AppointmentForm = Appointment.objects.filter(user=user).update(
                                 user = user,
@@ -195,13 +194,10 @@ def bookingSubmit(request):
                                 staff = staff_name,
                             ) 
                             messages.success(request, "Appointment Booked!")
-                            return redirect('index')
+                            return redirect('booking')
                         else:
                             messages.success(request, "The Selected Time Has Been Reserved Before!")
-                    else:
-                        messages.success(request, "The Selected Day Is Full!")
-                else:
-                    messages.success(request, "The Selected Date Is Incorrect")
+                    
             else:
                     messages.success(request, "The Selected Date Isn't In The Correct Time Period!")
         else:

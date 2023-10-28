@@ -32,7 +32,7 @@ urlpatterns = [
 
 
     #admin
-    path('admin-login/', admin.site.urls),
+    path('adminn/', admin.site.urls),
     path('', views.home, name='home'),
     path('home/', views.home, name='home'),
 

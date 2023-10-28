@@ -41,12 +41,12 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link text-white d-flex align-items-center" href="#" data-target="delivered-section">
-                        <i class="bi bi-box-arrow-in-down me-2"></i> Vendor Request
+                        <i class="bi bi-box-arrow-in-down me-2"></i> Service Provider Request
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link text-white d-flex align-items-center" href="#" data-target="inquiry-section">
-                        <i class="bi bi-shop me-2"></i> Vendors
+                        <i class="bi bi-shop me-2"></i> Service Providers
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -74,7 +74,7 @@
               <th class="text-center" scope="col"> Email</th>
            
               <th class="text-center" scope="col">Date Joined</th>
-              <th class="text-center" scope="col">Is Vendor</th>
+              <th class="text-center" scope="col">Phone number</th>
 
             </tr>
           </thead>
@@ -101,7 +101,7 @@
             <!-- ... Content specific to Vendor Request ... -->
             
 <div class="container mt-5">
-    <h1 class="mb-4">Vendor Requests</h1>
+    <h1 class="mb-4">Service Provider Requests</h1>
 
 {% if vendor_requests %}
 <div class="container mt-5">
@@ -137,7 +137,7 @@
 {% else %}
 <div class="container mt-5">
     <div class="alert alert-info text-center">
-        No vendor requests available.
+        No service provider requests available.
     </div>
 </div>
 {% endif %}
@@ -155,8 +155,8 @@
   <div id="inquiry-section" class="content-section">
             <!-- ... Content specific to Vendors ... -->
             <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5 ">
-            <h1 class="text-center mt-5 mb-5">Vendor Panel</h1>
-            <input class="form-control form-control-lg fs-3 border border-primary" id="myInput2" type="text" placeholder="Search Vendors">
+            <h1 class="text-center mt-5 mb-5">Service Provider Panel</h1>
+            <input class="form-control form-control-lg fs-3 border border-primary" id="myInput2" type="text" placeholder="Search Service Providers">
     <br>
     
     <div class="table-responsive">
@@ -222,7 +222,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Vendors</h5>
+                    <h5 class="card-title">Total Service Providers</h5>
                     <p class="card-text">350</p>
                 </div>
             </div>
@@ -230,7 +230,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Pending Vendor Requests</h5>
+                    <h5 class="card-title">Pending Service Providers Requests</h5>
                     <p class="card-text">15</p>
                 </div>
             </div>

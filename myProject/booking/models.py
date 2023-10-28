@@ -25,7 +25,6 @@ TIME_CHOICES = (
 
 class Appointment(models.Model):
     #declare a id
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     service = models.CharField(max_length=50, choices=SERVICE_CHOICES, default="Electrician")
     day= models.CharField(max_length=50, default="Not assigned")

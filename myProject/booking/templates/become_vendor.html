@@ -43,14 +43,90 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <h2 class="navbar-white text-white mx-auto">Vendor Request Form</h2>
-            </div>
-        </nav>
-    </header>
+       <nav class="navbar bg-white navbar-white navbar-expand-lg shadow-sm">
+        <div class="container-fluid">
+          <div class="d-flex justify-content-between w-100">
+            <a
+              class="navbar-brand cHover cGreen fs-2 me-auto"
+              href="{% url 'booking' %}"
+            >
+              ServiceEase
+            </a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mb-2 mb-lg-0 fs-5 ms-auto">
+                <li class="nav-item">
+                  <a
+                    type="button"
+                    class="nav-link active cHover"
+                    href="{% url 'become-vendor' %}"
+                    >Become a Service Provider</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    type="button"
+                    class="nav-link active cHover"
+                    href="{% url 'booking' %}"
+                    >Online Booking</a
+                  >
+                </li>
 
+                {% if user.is_authenticated %}
+                <!-- Staff Link-->
+
+                <li class="nav-item dropdown me-3 fs-5">
+                  <a
+                    class="nav-link active dropdown-toggle cHover"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Profile
+                  </a>
+                  <ul class="dropdown-menu border zNav">
+                    <li>
+                      <a class="dropdown-item" href="{% url 'userPanel' %}"
+                        >User Panel</a
+                      >
+                    </li>
+                    <li><hr class="" /></li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'logout-view' %}"
+                        >Sign Out</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+
+                {% else %}
+                <li class="nav-item me-3">
+                  <a class="nav-link active cHover" href="{% url 'register' %}"
+                    >Sign in/Sign Up</a
+                  >
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
     <div class="form-container">
+      <h1>ServiceProvider Form</h1>
+      <p>Fill up the form with details</p>
       <form method="post" class="row g-3">
         {% csrf_token %}
 
