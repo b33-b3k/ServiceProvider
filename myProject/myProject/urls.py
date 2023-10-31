@@ -27,7 +27,6 @@ urlpatterns = [
         path('booking/', include('booking.urls')),
         
 
-            path('appointments/', include('appointments.urls')), 
 
 
 
@@ -41,10 +40,10 @@ urlpatterns = [
     path('services/', views.services_view, name='services'),
     path('contact/', views.contact_view, name='contact'),
     path('register/', views.register_view, name='register'),
-    path('login-user/', views.loginn, name='login-user'),
+    # path('login-user/', views.loginn, name='login-user'),
     path('login/', views.login_view,name='login'),
 
-    # path('logout/', views.logout_view, name='logout'),
+    path('logout/', views.logout_view, name='logout'),
 
    
     path('forgot_password/', views.forgot_password_view, name='forgot_password'),

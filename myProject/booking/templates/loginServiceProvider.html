@@ -33,7 +33,7 @@
             </div>
             <div class="card fat">
               <div class="card-body">
-                <h4 class="card-title">Login</h4>
+                <h4 class="card-title">Login as Service Provider</h4>
                 {% comment %} Form for login{% endcomment %}
                 <form method="POST" class="my-login-validation" novalidate="">
                   {% csrf_token %}
@@ -88,10 +88,9 @@
                       Login
                     </button>
                   </div>
-                  <a href="{% url 'login-admin' %}"> Login/Sign Up as Admin</a>
                   <br>
 
-                   <a href="{% url 'login-provider' %}"> Login/Sign Up as ServiceProvider</a>
+                
                   <div class="mt-4 text-center">
                     Don't have an account?
                     <a href="{% url 'register'%}">Create One</a>

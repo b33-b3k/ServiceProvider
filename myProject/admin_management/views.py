@@ -8,11 +8,15 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from datetime import datetime, timedelta
-from booking.models import Appointment, Staff
+from booking.models import Staff
 from django.contrib.auth.decorators import login_required
 from booking.models import VendorRequest
 
 from django.contrib.auth.models import User
+from booking.models import Appointment
+from booking.models import Staff
+from booking.models import VendorRequest
+from booking.models import Inquiry
 
 
 
@@ -80,20 +84,6 @@ def accept_vendor_request(request, vendor_name):
     else:
         raise Http404("VendorRequest not found")
 
-# def staffPanel(request):
-#     today = datetime.today()
-#     minDate = today.strftime('%Y-%m-%d')
-#     deltatime = today + timedelta(days=21)
-#     strdeltatime = deltatime.strftime('%Y-%m-%d')
-#     maxDate = strdeltatime
-#     #Only show the Appointments 21 days from today
-#     items = Appointment.objects.filter(day__range=[minDate, maxDate]).order_by('day', 'time')
-
-#     return render(request, 'admin_management/admindashBoard.html', {
-#         'items':items,
-#     })
-
-
 def admin_login(request):
     if request.method == 'POST':
         email = request.POST.get('username')
@@ -114,9 +104,7 @@ def admin_login(request):
 
     return render(request, 'admin_management/login_adm.html')
 
-    # def logout_view(request):
-    #     logout(request)
-    #     return redirect('/') 
+  
 
 
 
@@ -154,3 +142,8 @@ def staffPanel(request):
     return render(request, 'admindashBoard.html', {
         'items':items,
     })
+
+def delete_user(request,id):
+    user=Staff.objects.get(id=id)
+    user.delete()
+    return redirect('admin-dashboard')

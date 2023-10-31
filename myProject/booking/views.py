@@ -4,9 +4,44 @@ from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
+from django.contrib.auth import authenticate,login,logout
+
 from .models import * # Import your model class
 
 from .forms import *
+
+
+
+def login_view(request):
+    if request.method == 'GET':
+        # Add the logic for handling the GET request
+        return render(request, 'loginServiceProvider.html')
+    elif request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Check if a user with the provided email exists
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+
+        if user is not None:
+            # If the user exists, authenticate using the email and password
+            user = authenticate(request, username=user.username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, "You have been logged in successfully!")
+                return redirect('dashboard-panel')  # Redirect to the home page after successful login
+            else:
+                messages.error(request, "Invalid email or password. Please try again.")
+                return redirect('login-provider')  # Redirect back to the login page if the authentication fails
+        else:
+            messages.error(request, "User with the provided email does not exist. Please try again.")
+            return redirect('login')  # Redirect back to the login page if the user does not exist
+    else:
+        return HttpResponse("Method Not Allowed", status=405)  # Return an HTTP 405 Method Not Allowed for unsupported methods
+
 
 
 def vendor_dashboard(request):
@@ -14,8 +49,11 @@ def vendor_dashboard(request):
     try:
         # Fetch appointments associated with the logged-in vendor
         appointments = Appointment.objects.all()
-        all_vendor_requests = VendorRequest.objects.all()
         staffs=Staff.objects.all()
+        user = User.objects.all()
+        
+
+        print(user)
 
         print(appointments)
     except Appointment.DoesNotExist:
@@ -26,8 +64,9 @@ def vendor_dashboard(request):
         return HttpResponseBadRequest(f"An error occurred: {e}")
     context = {
         'appointments': appointments,
-        'vendor_requests': all_vendor_requests,
         'items': staffs,
+        'usersss':user
+
         
     }
     return render(request, 'vendordashBoard.html', context)
@@ -153,7 +192,6 @@ def booking(request):
 })
 
 
-
 def bookingSubmit(request):
     user = request.user
     times = [
@@ -254,6 +292,30 @@ def userUpdate(request, id):
             
         })
 
+def appointmentDelete(request,id):
+    appointment = Appointment.objects.get(pk=id)
+    appointment.delete()
+    messages.success(request, "Appointment Deleted!")
+    return redirect('dashboard-panel')
+
+def inquiryDelete(request,id):
+    inquiry = Inquiry.objects.get(pk=id)
+    inquiry.delete()
+    messages.success(request, "Inquiry Deleted!")
+    return redirect('dashboard-panel')
+
+
+
+def appointmentFinished(request,id):
+    #make it take the appointment throgu id and make a field true
+    appointment = Appointment.objects.get(pk=id)
+    appointment.isFinished = "Yes"
+    appointment.save()
+    messages.success(request, "Appointment Finished!")
+    return redirect('dashboard-panel')
+    
+
+
 
 def userUpdateSubmit(request, id):
     user = request.user
@@ -287,7 +349,8 @@ def userUpdateSubmit(request, id):
                                 time = time,
                             ) 
                             messages.success(request, "Appointment Edited!")
-                            return redirect('index')
+
+                            return redirect('booking')
                         else:
                             messages.success(request, "The Selected Time Has Been Reserved Before!")
                  

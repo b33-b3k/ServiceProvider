@@ -22,13 +22,35 @@ TIME_CHOICES = (
     ("7 PM", "7 PM"),
     ("7:30 PM", "7:30 PM"),
 )
+DAY_CHOICES=(
+    #%Y-%m-%d format
+    
+    ("2023-11-03","2023-11-03"
+     ),
+    ("2023-11-04","2023-11-04"
+     ),
+    ("2023-11-05","2023-11-05"
+     ),
+    ("2023-11-06","2023-11-06"
+     ),
+    ("2023-11-07","2023-11-07"
+     ),
+    ("2023-11-08","2023-11-08"
+     ),
+    ("2023-11-09","2023-11-09"
+     ),
+  
+    
+)
+
 
 class Appointment(models.Model):
     #declare a id
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     service = models.CharField(max_length=50, choices=SERVICE_CHOICES, default="Electrician")
-    day= models.CharField(max_length=50, default="Not assigned")
-    
+    day= models.CharField(max_length=50,choices=DAY_CHOICES, default="Monday")
+    address = models.CharField(max_length=50, blank=True)
+    isFinished = models.CharField(max_length=15,default="No")
     time = models.CharField(max_length=10, choices=TIME_CHOICES, default="3 PM", null=True, blank=True)
     staff = models.CharField(max_length=50, default="Not assigned")
 
@@ -40,16 +62,17 @@ class Appointment(models.Model):
 class Staff(models.Model):
     
     name = models.CharField(max_length=100)
+    email = models.EmailField(
+        max_length=255,
+        unique=True,
+        verbose_name='email address',
+        default=""
+    
+    )
     contact_number = models.CharField(max_length=100)
     inquiry_message = models.TextField(default="")
     assigned_user= models.CharField(max_length=100,default="")
-    timestamp = models.DateTimeField(auto_now_add=True,
-                                    auto_now=False,
-                                    blank=True
-
-                                     )
-    
-
+    timestamp = models.DateTimeField(auto_now_add=True,auto_now=False,blank=True)
     # email = models.EmailField()
     # time = models.CharField(max_length=100)
     tier = models.CharField(max_length=50,default="Not assigned")
@@ -76,11 +99,13 @@ class VendorRequest(models.Model):
     business_name = models.CharField(max_length=255)
     business_address = models.TextField()
     
+    
     contact_number = models.CharField(max_length=15)
     email = models.EmailField()
     business_description = models.TextField()
     business_category = models.CharField(max_length=255)
     pan_number = models.CharField(max_length=255)
+    
 
     def __str__(self):
         return f"{self.user.username} | {self.business_name} | {self.business_category} | {self.pan_number}"
@@ -89,9 +114,10 @@ class VendorRequest(models.Model):
     
 
 class Inquiry(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='inquiries')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.CharField(max_length=255)
     staff_name = models.CharField(max_length=40)
+    isFinished= models.CharField(max_length=15, default="No")
 
     
     message = models.TextField()

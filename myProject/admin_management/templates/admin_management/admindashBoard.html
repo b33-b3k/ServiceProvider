@@ -74,7 +74,7 @@
               <th class="text-center" scope="col"> Email</th>
            
               <th class="text-center" scope="col">Date Joined</th>
-              <th class="text-center" scope="col">Phone number</th>
+              <th class="text-center" scope="col">Staff status</th>
 
             </tr>
           </thead>
@@ -181,6 +181,7 @@
         <td class="text-center">{{item.contact_number}}</td>
         <td class="text-center">{{item.service}}</td>
         <td class="text-center">{{item.experience}}</td>
+
         <td class="text-center">
             <select class="form-control set-tier" data-user-id="{{ item.id }}">
                 <option value="bronze" {% if item.tier == "bronze" %}selected{% endif %}>Bronze</option>
@@ -189,10 +190,7 @@
                 <!-- ... any other tiers ... -->
             </select>
         </td>
-        <td class="text-center">
-            <button class="btn btn-danger delete-user" data-user-id="{{ item.id }}">Delete</button>
-            <!-- Add other action buttons as needed -->
-        </td>
+        
     </tr>
     {% endfor %}
 </tbody>
@@ -237,7 +235,6 @@
         </div>
     </div>
     <div class="p-3">
-        <h2>User Sign-ups Over Time</h2>
         <!-- Insert a graphical representation, e.g., a line chart showing user sign-ups over the past months -->
     </div>
 </div>

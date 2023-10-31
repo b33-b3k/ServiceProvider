@@ -34,8 +34,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     'admin_management',
     'booking',
-    'appointments',
-        'widget_tweaks',
+    
 
 
 

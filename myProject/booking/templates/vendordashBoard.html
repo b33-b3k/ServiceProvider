@@ -76,7 +76,7 @@
                         <li class="nav-item mb-2">
                             <a class="nav-link text-white" href="#" data-target="inquiry-section">
                                 <i class="bi bi-shop me-2"></i>
-                                Service Provider 
+                                Inquiries 
                             </a>
                         </li>
                         <li class="nav-item mt-auto">
@@ -118,6 +118,13 @@
                         <td>{{ appointment.service }}</td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{% url 'userUpdate' appointment.id %}">Edit</a>
+<a class="btn btn-success btn-sm" href="{% url 'appointmentFinished' appointment.id %}">
+    {% if appointment.isFinished == "Yes" %}
+        Done
+    {% else %}
+        Mark as Done
+    {% endif %}
+</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -137,30 +144,44 @@
                <div id="delivered-section" class="content-section mt-5">
     <div class="container">
         <h1 class="mb-4">Delivered</h1>
-        {% if vendor_requests %}
+        {% if appointments %}
         <div class="table-responsive">
             <table class="table table-hover table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>Business Name</th>
-                        <th>Address</th>
-                        <th>Contact</th>
+                        <th>Client Name</th>
                         <th>Email</th>
-                        <th>Description</th>
-                        <th>Category</th>
+                        <th>Service</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                       
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    {% for vendor_request in vendor_requests %}
+                {% for appointment in appointments%}
+                  {% comment %} {% for user in usersss%} {% endcomment %}
+                    {% if user == appointment.user %}
+                        {% if appointment.isFinished == "Yes" %}
                     <tr>
-                        <td>{{ vendor_request.business_name }}</td>
-                        <td>{{ vendor_request.business_address }}</td>
-                        <td>{{ vendor_request.contact_number }}</td>
-                        <td>{{ vendor_request.email }}</td>
-                        <td>{{ vendor_request.business_description }}</td>
-                        <td>{{ vendor_request.business_category }}</td>
+                        {% comment %} check if user equals staff {% endcomment %}
+
+                        
+    
+                        
+                        <td>{{ appointment.user }}</td>
+                        <td>{{ appointment.user.email }}</td>
+                        <td>{{ appointment.service }}</td>
+                        <td>{{ appointment.day }}</td>
+                        <td>{{ appointment.time }}</td>
+
                     </tr>
-                    {% endfor %}
+                        {% endif %}
+              
+                    {% endif %}
+                    {% comment %} {% endfor %} {% endcomment %}
+                    
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -177,7 +198,7 @@
     
     <!-- Display list of inquiries -->
     <div>
-        <h3>All Received Inquiries</h3>
+        <h3>Inquiries</h3>
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
@@ -194,15 +215,22 @@
                 {% for inquiry in items %}
                 <tr>
                     <td>{{ inquiry.name }}</td>
-                    <td>{{ inquiry.text }}</td>
+                    <td>{{ inquiry.inquiry_message }}</td>
                     <td>{{ inquiry.service }}</td>
                     <td>{{ inquiry.timestamp }}</td>
 
                     <td>
-    <a href="" class="btn btn-info btn-sm">View</a>
-    <a href="" class="btn btn-warning btn-sm">Edit</a>
-    <a href="" class="btn btn-danger btn-sm">Delete</a>
-    <a href="" class="btn btn-success btn-sm">Reply</a>
+                        <a class="btn btn-success btn-sm" href=
+                            "{% url 'inquiryDelete' inquiry.id %}"
+                         >
+    {% if inquiry.isFinished == "Yes" %}
+        Done
+    {% else %}
+        Mark as Done
+    {% endif %}
+</a>
+
+                      
 </td>
 
                 </tr>
@@ -254,7 +282,10 @@
         });
     </script>
     {% else %}
-    <h1>Not logged in</h1>
+    
+    <h1>Access Denied</h1>
+    <p>You do not have permission to access this page.</p>
+    <a href="{% url 'login-admin' %}">Login</a>
     {% endif %}
 </body>
 

@@ -76,7 +76,7 @@ def login_view(request):
                 return redirect('booking')  # Redirect to the home page after successful login
             else:
                 messages.error(request, "Invalid email or password. Please try again.")
-                return redirect('login-user')  # Redirect back to the login page if the authentication fails
+                return redirect('login')  # Redirect back to the login page if the authentication fails
         else:
             messages.error(request, "User with the provided email does not exist. Please try again.")
             return redirect('login')  # Redirect back to the login page if the user does not exist
