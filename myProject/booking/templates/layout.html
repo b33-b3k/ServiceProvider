@@ -12,162 +12,117 @@
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
       crossorigin="anonymous"
     />
-    <!-- JavaScript Bundle with Popper -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-      crossorigin="anonymous"
-      defer
-    ></script>
-    
 
-    {% block head %} {% endblock %}
+    <!-- Add your custom styles here -->
+    <style>
+      body {
+        padding-top: 0;
+        margin-top: -20;
+      }
+
+      .nav-link {
+        color: white;
+      }
+
+      .nav-link:hover {
+        color: yellow;
+      }
+
+      .alert {
+        margin-top: 20px;
+      }
+
+      .list-group-item {
+        background-color: #f8f9fa;
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <nav class="navbar bg-white navbar-white navbar-expand-lg shadow-sm">
-        <div class="container-fluid">
-          <div class="d-flex justify-content-between w-100">
-            <a
-              class="navbar-brand cHover cGreen fs-2 me-auto"
-              href="{% url 'booking' %}"
-            >
-              ServiceEase
-            </a>
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mb-2 mb-lg-0 fs-5 ms-auto">
-                <li class="nav-item">
-                  <a
-                    type="button"
-                    class="nav-link active cHover"
-                    href="{% url 'become-vendor' %}"
-                    >Become a ServiceProvider</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    type="button"
-                    class="nav-link active cHover"
-                    href="{% url 'booking' %}"
-                    >Online Booking</a
-                  >
-                </li>
-
-                {% if user.is_authenticated %}
-                <!-- Staff Link-->
-
-                <li class="nav-item dropdown me-3 fs-5">
-                  <a
-                    class="nav-link active dropdown-toggle cHover"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Profile
-                  </a>
-                  <ul class="dropdown-menu border zNav">
-                    <li>
-                      <a class="dropdown-item" href="{% url 'userPanel' %}"
-                        >User Panel</a
-                      >
-                    </li>
-                    <li><hr class="" /></li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'logout-view' %}"
-                        >Sign Out</a
-                      >
-                    </li>
-                  </ul>
-                </li>
-
-                {% else %}
-                <li class="nav-item me-3">
-                  <a class="nav-link active cHover" href="{% url 'register' %}"
-                    >Sign in/Sign Up</a
-                  >
-                </li>
-                {% endif %}
-              </ul>
-            </div>
-          </div>
+   <header>
+      <div class="col-2 bg-dark position-fixed" style="height: 100vh; padding: 0;">
+        <div class="p-3 text-white text-center" style="background-color: #333; border-bottom: 1px solid #555;">
+          <h2>ServiceEase</h2>
         </div>
-      </nav>
-
-      <!--Messages Start-->
-      {% if messages %} {% for message in messages %}
-      <div
-        class="alert alert-success alert-dismissible fade show text-center"
-        role="alert"
-      >
-        <h3 class="display-3">{{ message }}</h3>
-        <button
-          type="button"
-          class="btn-close fs-1 position-absolute top-50 start-0 translate-middle-y"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
+        <ul class="nav flex-column p-2">
+          
+          <li class="nav-item mb-2">
+            <a class="nav-link text-white d-flex align-items-center" href="{% url 'become-vendor' %}">
+              <i class="bi bi-person me-2"></i> Become a ServiceProvider
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-white d-flex align-items-center"  data-target="booking-section" href="{% url 'booking' %}">
+              <i class="bi bi-calendar2-check me-2"></i> Online Booking
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-white d-flex align-items-center" href="{% url 'userPanel' %}">
+              <i class="bi bi-person me-2"></i> User Panel
+            </a>
+          </li>
+          <li class="nav-item mt-auto">
+            <a class="nav-link text-white d-flex align-items-center" href="{% url 'logout-view' %}">
+              <i class="bi bi-box-arrow-left me-2"></i> Logout
+            </a>
+          </li>
+        </ul>
       </div>
-      {% endfor %} {% endif %}
-      <!--Messages End-->
     </header>
 
-    <title>User Panel</title>
-    {% load static %} {% block body %} {% if user.is_authenticated %}
-    <h1 class="ms-5 mt-5">User Panel</h1>
-
-    <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
-      <h2 class="">User Info:</h2>
-      <ul class="list-group fs-4 mt-3">
-        <li class="list-group mt-2">Name: {{ user.username }}</li>
-        <li class="list-group mt-2">Email: {{ user.email }}</li>
-        <li class="list-group mt-2">Date Joined: {{ user.date_joined }}</li>
-        <li class="list-group mt-2">Is Staff: {{ user.is_staff }}</li>
-      </ul>
-    </div>
-
-    <!--Appointment Loop-->
-    {% if appointments.count > 0 %}
-    <div class="mt-5">
-      <h1 class="ms-5">Appointments:</h1>
-      <div class="shadow p-4 mb-3 bg-body bg-body rounded text-black m-5">
-        {% for appointment in appointments %}
-        <div class="list-group fs-4 border p-3 mb-3">
-          <p class="list-group mt-2">Day: {{ appointment.day }}</p>
-          <p class="list-group mt-2">Time: {{ appointment.time }}</p>
-          <p class="list-group mt-2">Service: {{ appointment.service }}</p>
-          <div class="mt-3 mb-2">
-            <a
-              class="btn btn-primary rounded-3 p-2"
-              href="{% url 'userUpdate' appointment.id %}"
-              >Edit Appointment</a
-            >
-          </div>
-        </div>
+    <!--Messages Start-->
+   {% if messages %}
+    <script>
+        {% for message in messages %}
+            alert("{{ message }}");
         {% endfor %}
-      </div>
-    </div>
-    {% endif %} {% else %}
+    </script>
+{% endif %}
 
-    <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
-      <h1 class="p-2 ms-3">First Sign in!</h1>
-      <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
-    </div>
+    <!--Messages End-->
 
-    {% endif %} {% endblock %}
-    <!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <title>User Panel</title>
 
+    {% block body %}
+      {% if user.is_authenticated %}
+        <h1 class="ms-5 mt-5">User Panel</h1>
+
+        <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
+          <h2 class="">User Info:</h2>
+          <ul class="list-group fs-4 mt-3">
+            <li class="list-group-item list-group-item-action">Name: {{ user.username }}</li>
+            <li class="list-group-item list-group-item-action">Email: {{ user.email }}</li>
+            <li class="list-group-item list-group-item-action">Date Joined: {{ user.date_joined }}</li>
+            <li class="list-group-item list-group-item-action">Is Staff: {{ user.is_staff }}</li>
+          </ul>
+        </div>
+
+        <!--Appointment Loop-->
+        {% if appointments.count > 0 %}
+          <div class="mt-5">
+            <h1 class="ms-5">Appointments:</h1>
+            <div class="shadow p-4 mb-3 bg-body bg-body rounded text-black m-5">
+              {% for appointment in appointments %}
+                <div class="list-group fs-4 border p-3 mb-3">
+                  <p class="list-group-item list-group-item-action">Day: {{ appointment.day }}</p>
+                  <p class="list-group-item list-group-item-action">Time: {{ appointment.time }}</p>
+                  <p class="list-group-item list-group-item-action">Service: {{ appointment.service }}</p>
+                  <div class="mt-3 mb-2">
+                    <a class="btn btn-primary rounded-3 p-2" href="{% url 'userUpdate' appointment.id %}">Edit Appointment</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
+          <h1 class="p-2 ms-3">First Sign in!</h1>
+          <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    <!-- Link to Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
   </body>
 </html>

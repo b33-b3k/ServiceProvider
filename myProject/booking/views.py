@@ -5,44 +5,45 @@ from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
-
+from django.shortcuts import get_object_or_404
 from .models import * # Import your model class
-
 from .forms import *
 
 
 
 def login_view(request):
     if request.method == 'GET':
-        # Add the logic for handling the GET request
         return render(request, 'loginServiceProvider.html')
     elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Check if a user with the provided email exists
+        # Check if a user with the provided email exists in the User model
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            user = None
-
-        if user is not None:
-            # If the user exists, authenticate using the email and password
-            user = authenticate(request, username=user.username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, "You have been logged in successfully!")
-                return redirect('dashboard-panel')  # Redirect to the home page after successful login
-            else:
-                messages.error(request, "Invalid email or password. Please try again.")
-                return redirect('login-provider')  # Redirect back to the login page if the authentication fails
-        else:
             messages.error(request, "User with the provided email does not exist. Please try again.")
-            return redirect('login')  # Redirect back to the login page if the user does not exist
+            return redirect('login-provider')  # Redirect back to the login page if the user does not exist
+
+        # Authenticate the user using the email and password
+        user = authenticate(request, username=user.username, password=password)
+        if user is not None:
+            # Check if the user's email exists in the Staff model
+            try:
+                staff_member = Staff.objects.get(email=email)
+                # If the user is a staff member, proceed with login
+                login(request, user)
+                messages.success(request, "You have been logged in successfully as staff!")
+                return redirect('dashboard-panel')  # Redirect to the dashboard panel after successful login
+            except Staff.DoesNotExist:
+                # The user exists but is not listed as a staff member in the Staff model
+                messages.error(request, "You do not have staff access. Please contact the administrator.")
+                return redirect('login-provider')  # Redirect back to the login page if the user is not a staff member
+        else:
+            messages.error(request, "Invalid email or password. Please try again.")
+            return redirect('login-provider')  # Redirect back to the login page if the authentication fails
     else:
         return HttpResponse("Method Not Allowed", status=405)  # Return an HTTP 405 Method Not Allowed for unsupported methods
-
-
 
 def vendor_dashboard(request):
     # Fetch appointments associated with the logged-in vendor
@@ -144,11 +145,10 @@ def logout_view(request):
 
 
 def booking(request):
-
     weekdays = validWeekday(7)
     validateWeekdays = isWeekdayValid(weekdays)
-    times = [        "3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"]
-    address = ""  # Add this line to include address in the context
+    times = ["3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"]
+    staff_members = Staff.objects.all()  # Query all staff members
 
     if request.method == 'POST':
         service = request.POST.get('service')
@@ -156,8 +156,6 @@ def booking(request):
         time = request.POST.get('time')
         address = request.POST.get('address')
 
-        
-     
         print("Service: ", service)
         print("Day: ", day)
         print("Time: ", time)
@@ -171,26 +169,24 @@ def booking(request):
         request.session['service'] = service
         request.session['time'] = time
         request.session['address'] = address
-
-         # Save the data to the Appointment model
+        
+        # Save the data to the Appointment model
         appointment = Appointment.objects.create(
             user=request.user,
             service=service,
             day=day,
             time=time,
-            staff="Not assigned",
+            staff="Not assigned",  # You might want to assign a staff member here
         )
 
         return redirect('bookingSubmit')
 
-
     return render(request, 'booking.html', {
-    'weekdays': weekdays,
-    'validateWeekdays': validateWeekdays,
-    'times': times,  # Add this line to include time in the context
-    'address': address  # Add this line to include address in the context
-})
-
+        'weekdays': weekdays,
+        'validateWeekdays': validateWeekdays,
+        'times': times,
+        'staff_members': staff_members,  # Add this line to include staff in the context
+    })
 
 def bookingSubmit(request):
     user = request.user
@@ -254,6 +250,34 @@ def userPanel(request):
         'user':user,
         'appointments':appointments,
     })
+
+
+
+def inquirySubmit(request):
+    if request.method == 'POST':
+        print(request.POST)  # This will print the POST data to the console
+
+        staff_id = request.POST.get('staff_id')
+        message = request.POST.get('message')
+        print(f"Staff ID: {staff_id}, Message: {message}")  # Check what you're getting here
+
+
+        if staff_id and message:
+            staff_member = get_object_or_404(Staff, pk=staff_id)
+            try:
+                # Assuming 'inquiry_message' is a field in your StaffMember model
+                staff_member.inquiry_message = message
+                staff_member.save()
+                messages.success(request, "Your message has been sent to the staff member.")
+                return redirect('booking')  # Redirect to the contact page after successful submission
+            except Exception as e:
+                messages.error(request, f"An error occurred: {e}")
+                return redirect('booking')  # Redirect back to the contact page if an error occurs
+        else:
+            messages.error(request, "Please provide a message.")
+            return redirect('booking')  # Redirect back to the contact page if the message is missing
+    else:
+        return HttpResponse("Method Not Allowed", status=405)  # Return an HTTP 405 Method Not Allowed for unsupported methods
 def userUpdate(request, id):
     appointment = Appointment.objects.get(pk=id)
     
@@ -298,11 +322,23 @@ def appointmentDelete(request,id):
     messages.success(request, "Appointment Deleted!")
     return redirect('dashboard-panel')
 
-def inquiryDelete(request,id):
-    inquiry = Inquiry.objects.get(pk=id)
-    inquiry.delete()
-    messages.success(request, "Inquiry Deleted!")
-    return redirect('dashboard-panel')
+def appointmentDeleteBooking(request,id):
+    appointment = Appointment.objects.get(pk=id)
+    appointment.delete()
+    messages.success(request, "Appointment Deleted!")
+    return redirect('booking')
+
+def inquiryDelete(request, id):
+    try:
+        appointment = Appointment.objects.get(pk=id)
+        
+        messages.success(request, "Inquiry Deleted!")
+        return redirect('dashboard-panel')
+    except:
+        # Handle the case where the inquiry does not exist
+        messages.error(request, "Inquiry does not exist")
+        
+        return redirect('dashboard-panel')  # Redirect to the appropriate page
 
 
 

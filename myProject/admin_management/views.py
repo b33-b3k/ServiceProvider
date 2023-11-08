@@ -85,6 +85,7 @@ def accept_vendor_request(request, vendor_name):
         raise Http404("VendorRequest not found")
 
 def admin_login(request):
+    
     if request.method == 'POST':
         email = request.POST.get('username')
         password = request.POST.get('password')
@@ -95,6 +96,7 @@ def admin_login(request):
         if user is not None:
             if user.is_active and (user.is_staff or user.is_superuser):
                 login(request, user)
+
                 # Redirect to a dashboard or another page
                 return redirect('admin-dashboard')
             else:

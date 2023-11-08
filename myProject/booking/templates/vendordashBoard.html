@@ -45,6 +45,13 @@
     </style>
 
     <title>Service Provider Dashboard</title>
+     {% if messages %}
+    <script>
+        {% for message in messages %}
+            alert("{{ message }}");
+        {% endfor %}
+    </script>
+{% endif %}
 </head>
 
 <body>
@@ -117,8 +124,9 @@
                         <td>{{ appointment.staff }}</td>
                         <td>{{ appointment.service }}</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'userUpdate' appointment.id %}">Edit</a>
+                            {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'userUpdate' appointment.id %}">Edit</a> {% endcomment %}
 <a class="btn btn-success btn-sm" href="{% url 'appointmentFinished' appointment.id %}">
+    
     {% if appointment.isFinished == "Yes" %}
         Done
     {% else %}
@@ -212,7 +220,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for inquiry in items %}
+                {% comment %} {% for inquiry in items %}
                 <tr>
                     <td>{{ inquiry.name }}</td>
                     <td>{{ inquiry.inquiry_message }}</td>
@@ -221,20 +229,20 @@
 
                     <td>
                         <a class="btn btn-success btn-sm" href=
-                            "{% url 'inquiryDelete' inquiry.id %}"
+                            "{% url 'inquiryDelete' inquiry.id %}" {% endcomment %}
                          >
-    {% if inquiry.isFinished == "Yes" %}
+    {% comment %} {% if inquiry.isFinished == "Yes" %}
         Done
     {% else %}
         Mark as Done
-    {% endif %}
+    {% endif %} {% endcomment %}
 </a>
 
                       
 </td>
 
                 </tr>
-                {% endfor %}
+                {% comment %} {% endfor %} {% endcomment %}
             </tbody>
         </table>
     </div>

@@ -5,7 +5,9 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from django.conf import settings
+
+from django.contrib.auth import update_session_auth_hash
 
 
 
@@ -90,39 +92,51 @@ def forgot_password_view(request):
         email = request.POST.get('email')
         try:
             user = User.objects.get(email=email)
+            request.session['reset_email'] = user.email  # Store the email in the session
+            messages.success(request, "Please proceed to change your password.")
+            return redirect('change_password')  # Redirect to the password change view
         except User.DoesNotExist:
-            user = None
-
-        if user is not None:
-            # Generate a unique token for the password reset link
-            reset_token = str(uuid.uuid4())  # Convert the UUID4 to a string
-
-            # Save the token and its expiration date in the user's profile or a separate password reset model
-            user.profile.reset_token = reset_token
-            user.profile.reset_token_expires_at = timezone.now() + timedelta(hours=1)
-            user.profile.save()
-            # Send an email to the user containing the password reset URL
-            
-
-            # Construct the password reset link using the token
-            reset_link = f"http://127.0.0.1/reset_password/?token={reset_token}"
-
-            # Send an email to the user with the password reset link
-            # send_mail(
-            #     'Password Reset Request',
-            #     f'Please click the following link to reset your password: {reset_link}',
-            #     'from@example.com',  # Replace with your email address
-            #     [email],
-            #     fail_silently=False,
-            # )
-            messages.success(request, "A password reset link has been sent to your email address.")
-            return redirect('login')  # Redirect to the login page after sending the password reset link
-        else:
             messages.error(request, "User with the provided email does not exist. Please try again.")
-            return redirect('reset.html')  # Redirect back to the forgot password page if the user does not exist
+            return redirect('forgot_password')
     else:
-        return render(request, 'forgot.html')  # Render the forgot password page for GET requests
+        return render(request, 'forgot.html')
 
+
+
+
+
+# Change Password View
+def change_password(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Retrieve the email from the session
+        reset_email = request.session.get('reset_email')
+        if not reset_email:
+            messages.error(request, "No password reset request found.")
+            return redirect('forgot_password')
+
+        if new_password != confirm_password:
+            messages.error(request, 'The two password fields didn’t match.')
+            return render(request, 'reset.html')
+
+        try:
+            user = User.objects.get(email=reset_email)
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # Keep the user logged in after password change
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('login')  # Redirect to login page
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+            return redirect('forgot_password')
+    else:
+        return render(request, 'reset.html')
+#faq
+def faq_view(request):
+    return render(request, 'faq.html')
+    
 
 def logout_view(request):
     logout(request)

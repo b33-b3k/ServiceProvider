@@ -15,7 +15,6 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-
     <title>ServiceEase</title>
 
     <!-- slider stylesheet -->
@@ -79,6 +78,9 @@
                   <li class="nav-item active">
                     <a class="nav-link" href="services">Services</a>
                   </li>
+                  <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
+                                </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'contact' %}"
                       >Contact Us</a
@@ -173,7 +175,7 @@
                       <div class="img-box">
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
                       </div>
-                      <p>Lorem Ipsum is simply dummy text</p>
+                      <p>Kathmandu</p>
                     </div>
                   </a>
                 </div>
@@ -223,16 +225,7 @@
 
     <!-- end info_section -->
 
-    <!-- footer section -->
-    <footer class="footer_section">
-      <div class="container">
-        <p>
-          &copy; <span id="displayDateYear"></span> All Rights Reserved By
-          <a href="https://html.design/">Free Html Templates</a>
-        </p>
-      </div>
-    </footer>
-    <!-- footer section -->
+    
 
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>

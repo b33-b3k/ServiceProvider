@@ -3,14 +3,15 @@
 {% load static %}
 {% block body %}
 <style>
+
     body {
         background-color: #f4f6f9;
         font-family: 'Arial', sans-serif;
+        padding-top: 0; /* Removed top padding */
     }
-
-    .booking-container {
+.booking-container {
         max-width: 600px;
-        margin: 5% auto;
+        margin: 2% auto; /* Adjusted top margin from 5% to 2% */
         padding: 20px;
         background-color: #ffffff;
         border-radius: 15px;
@@ -73,14 +74,28 @@
         padding: 10px 20px;
     }
 </style>
+<script>
+    function validateForm() {
+        const service = document.querySelector('input[name="service"]:checked');
+        const day = document.querySelector('select[name="day"]');
+        const address = document.querySelector('input[name="address"]');
+        const time = document.querySelector('select[name="time"]');
+        const number = document.querySelector('input[name="number"]');
 
+        if (!service || !day.value || !address.value || !time.value || !number.value) {
+            alert("Please fill in all the values before proceeding!");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 
 <div class="booking-container">
     {% if user.is_authenticated %}
-    <h1 class="text-center mb-4">Online Booking</h1>
+    <h1 class="text-center">Online Booking</h1>
 
-    <form method="post" action="{% url 'booking' %}">
+    <form method="post" action="{% url 'booking' %}" onsubmit="return validateForm()">
         {% csrf_token %}
         <div class="radio-container">
     <label class="radio-label">
@@ -111,7 +126,7 @@
             {% endfor %}
         </select>
         <h3>Contact Number:</h3>
-        <input type="text" class="form-control mb-3" name="number" placeholder="Enter your phone number">
+        <input type="number" class="form-control mb-3" name="number" placeholder="Enter your phone number">
 
         <button type="submit" class="btn btn-primary text-white btn-block">Next</button>
     </form>

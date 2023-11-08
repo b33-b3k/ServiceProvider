@@ -31,7 +31,7 @@ urlpatterns = [
 
 
     #admin
-    path('adminn/', admin.site.urls),
+    path('admin-login/', admin.site.urls),
     path('', views.home, name='home'),
     path('home/', views.home, name='home'),
 
@@ -42,11 +42,15 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     # path('login-user/', views.loginn, name='login-user'),
     path('login/', views.login_view,name='login'),
+    #faq
+    path('faq/', views.faq_view, name='faq'),
 
     path('logout/', views.logout_view, name='logout'),
 
    
     path('forgot_password/', views.forgot_password_view, name='forgot_password'),
+    path('change-password-page/', views.change_password, name='change_password'),
+
 
 
 

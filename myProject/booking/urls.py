@@ -3,15 +3,20 @@ from . import views
 
 urlpatterns = [
     # path('', views.index, name='index'),
-    path('', views.booking, name='booking'),
+    path('booking', views.booking, name='booking'),
     path('login-provider', views.login_view, name='login-provider'),
 
 
     path('booking-submit', views.bookingSubmit, name='bookingSubmit'),
-    path('user-panel', views.userPanel, name='userPanel'),
+    path('', views.userPanel, name='userPanel'),
     path('appointment-delete/<int:id>', views.appointmentDelete, name='appointmentDelete'),
+    path('appointment-delete-booking/<int:id>', views.appointmentDeleteBooking, name='appointmentDeleteBooking'),
+
     path('appointment-finished/<int:id>', views.appointmentFinished, name='appointmentFinished'),
     path('inquiry-delete/<int:id>', views.inquiryDelete, name='inquiryDelete'),
+
+    path('inquiry-submit', views.inquirySubmit, name='inquirySubmit'),
+    
 
 
     path('user-update/<int:id>', views.userUpdate, name='userUpdate'),

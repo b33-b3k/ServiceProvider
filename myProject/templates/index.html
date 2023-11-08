@@ -3,6 +3,7 @@
 <html>
 
 <head>
+
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -16,6 +17,12 @@
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -62,6 +69,9 @@
                                     <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" href="{% url 'register' %}">
                                         <button type="button" class="btn btn-primary rounded-pill py-2 px-4">Login/Signup</button>
                                     </a>
@@ -99,52 +109,6 @@
     <!-- end feature section -->
 
     <!-- about section -->
-
-<section class="about_section layout_padding-bottom">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-6">
-                <div class="detail-box text-center">
-                    <h2 class="display-4 mb-4">About us</h2>
-                    <p class="lead mb-4">
-                        Our mission is to deliver exceptional service and customer satisfaction with every project we undertake. With years of industry experience, we have built a strong reputation for quality workmanship and reliable service.
-                    </p>
-                    <a href="" class="btn btn-primary rounded-pill py-2 px-4">Read More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <style>
-        .about_section {
-            background-color: #f9f9f9; /* Light gray background */
-        }
-
-        .about_section .display-4 {
-            font-size: 2.5rem; /* Adjusted font size */
-            color: #333; /* Dark text color for contrast */
-        }
-
-        .about_section .lead {
-            font-size: 1.25rem; /* Adjusted font size */
-            color: #555; /* Grayish text color */
-        }
-
-        .about_section .btn {
-            background-color: #FF6347; /* Tomato color */
-            border: none;
-            transition: background-color 0.3s; /* Transition effect */
-        }
-
-        .about_section .btn:hover {
-            background-color: #FF4500; /* Darker shade on hover */
-        }
-
-        /* Extra padding for better spacing */
-        .about_section .detail-box {
-            padding: 20px 0;
-        }
-    </style>
-</section>
 
 
 
@@ -227,6 +191,44 @@
     </section>
 
     <!-- end about section -->
+    <div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Accordion Item #1
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Accordion Item #2
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Accordion Item #3
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- professional section -->
 
@@ -258,6 +260,7 @@
     </section>
 
     <!-- end professional section -->
+    
 
     <!-- service section -->
 
@@ -437,7 +440,7 @@
     </section>
 
     <!-- end client section -->
-
+  
     <!-- contact section -->
 
     <section class="contact_section layout_padding">
@@ -447,21 +450,31 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <form action="">
+            <form action="https://formspree.io/f/xpzgnzya" method="POST">
               <div>
-                <input type="text" placeholder="Name" />
+                <input type="text" placeholder="Name" style="color: black" />
               </div>
               <div>
-                <input type="text" placeholder="Phone Number" />
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  style="color: black"
+                />
               </div>
               <div>
-                <input type="email" placeholder="Email" />
+                <input type="email" placeholder="Email" name="email" style="color: white text-color:black" />
               </div>
               <div>
-                <input type="text" class="message-box" placeholder="Message" />
+                <input
+                  type="text"
+                  class="message-box"
+                  name='message'
+                  placeholder="Message"
+                  style="color: black"
+                />
               </div>
               <div class="d-flex">
-                <button>SEND</button>
+                <button style="color: black" type="submit">SEND</button>
               </div>
             </form>
           </div>
