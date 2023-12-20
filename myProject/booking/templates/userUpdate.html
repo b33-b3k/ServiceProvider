@@ -80,7 +80,7 @@
 </style>
 <div class="container mt-5">
     {% if user.is_authenticated %}
-        {% if delta24 == True %}
+        {% if True %}
             <div class="edit-appointment-card">
                 <h1 class="text-center">Edit Appointment</h1>
                 <form method="post" action="{% url 'userUpdate' id %}" class="appointment-form">

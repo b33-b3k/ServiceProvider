@@ -3,24 +3,41 @@
 {% load static %}
 {% block body %}
 
+<style>
+    .main-content {
+    margin-left: 250px; /* Adjust this value based on your sidebar's width */
+    padding: 20px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+</style>
 
 
 
+
+<div class="main-content">
 {% if user.is_authenticated %}
-<h1 class="text-center fPersian mt-3">Edit Appointment</h1>
-
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
-    <form method="post" action="{% url 'userUpdateSubmit' id %}" class="me-2 ms-2" required>
-        {% csrf_token %}
-        
-        <!--input time-->
-        <h3 class="text-center fPersian mt-4">Time:</h3>
-        <div>
-            <select class="form-select fs-3 text-center" name="time">
-                {% for time in times %}
-                <option value="{{time}}">{{time}}</option>
-                {% endfor %}
-            </select>
+    
+    <h1 class="text-center fPersian mt-3">Edit Appointment</h1>
+    
+    <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
+        <form method="post" action="{% url 'userUpdateSubmit' id %}" class="me-2 ms-2" required>
+            {% csrf_token %}
+            
+            <!--input time-->
+            <h3 class="text-center fPersian mt-4">Time:</h3>
+            <div>
+                <select class="form-select fs-3 text-center" name="time">
+                    {% for time in times %}
+                    <option value="{{time}}">{{time}}</option>
+                    {% endfor %}
+                </select>
         </div>
 
         <button type="submit" class="btn btn-primary text-white mt-3 fPersian">Submit</button>
@@ -38,4 +55,5 @@
 {% endif %}
 
 
+</div>
 {% endblock %}

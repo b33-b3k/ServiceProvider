@@ -80,12 +80,7 @@
                                 Delivered
                             </a>
                         </li>
-                        <li class="nav-item mb-2">
-                            <a class="nav-link text-white" href="#" data-target="inquiry-section">
-                                <i class="bi bi-shop me-2"></i>
-                                Inquiries 
-                            </a>
-                        </li>
+                       
                         <li class="nav-item mt-auto">
                             <a class="nav-link text-white" href="logout-view">
                                 <i class="bi bi-box-arrow-left me-2"></i>
@@ -148,8 +143,8 @@
 </div>
 
 
-                <!-- Delivered Section -->
-               <div id="delivered-section" class="content-section mt-5">
+<!-- Delivered Section -->
+<div id="delivered-section" class="content-section mt-5">
     <div class="container">
         <h1 class="mb-4">Delivered</h1>
         {% if appointments %}
@@ -161,34 +156,18 @@
                         <th>Email</th>
                         <th>Service</th>
                         <th>Day</th>
-                        <th>Time</th>
-                       
-                        
                     </tr>
                 </thead>
                 <tbody>
-                {% for appointment in appointments%}
-                  {% comment %} {% for user in usersss%} {% endcomment %}
-                    {% if user == appointment.user %}
-                        {% if appointment.isFinished == "Yes" %}
+                {% for appointment in appointments %}
+                    {% if appointment.isFinished == "Yes" %}
                     <tr>
-                        {% comment %} check if user equals staff {% endcomment %}
-
-                        
-    
-                        
-                        <td>{{ appointment.user }}</td>
+                        <td>{{ appointment.user.username }}</td> 
                         <td>{{ appointment.user.email }}</td>
                         <td>{{ appointment.service }}</td>
                         <td>{{ appointment.day }}</td>
-                        <td>{{ appointment.time }}</td>
-
                     </tr>
-                        {% endif %}
-              
                     {% endif %}
-                    {% comment %} {% endfor %} {% endcomment %}
-                    
                 {% endfor %}
                 </tbody>
             </table>
@@ -201,52 +180,8 @@
     </div>
 </div>
 
-                <!-- Vendors Section -->
-                <div id="inquiry-section" class="content-section mt-5">
-    
-    <!-- Display list of inquiries -->
-    <div>
-        <h3>Inquiries</h3>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>User</th>
 
-                    <th>Inquiry</th>
-                    <th>Service </th>
-
-                    <th>Date Submitted</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% comment %} {% for inquiry in items %}
-                <tr>
-                    <td>{{ inquiry.name }}</td>
-                    <td>{{ inquiry.inquiry_message }}</td>
-                    <td>{{ inquiry.service }}</td>
-                    <td>{{ inquiry.timestamp }}</td>
-
-                    <td>
-                        <a class="btn btn-success btn-sm" href=
-                            "{% url 'inquiryDelete' inquiry.id %}" {% endcomment %}
-                         >
-    {% comment %} {% if inquiry.isFinished == "Yes" %}
-        Done
-    {% else %}
-        Mark as Done
-    {% endif %} {% endcomment %}
-</a>
-
-                      
-</td>
-
-                </tr>
-                {% comment %} {% endfor %} {% endcomment %}
-            </tbody>
-        </table>
-    </div>
-</div>
+ 
 
                 
                 

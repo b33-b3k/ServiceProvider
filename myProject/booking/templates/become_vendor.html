@@ -40,24 +40,26 @@
     </style>
     <script>
     function validateForm() {
-        const service = document.querySelector('input[name="inputName"]:checked');
-        const day = document.querySelector('select[name="day"]');
-        const address = document.querySelector('input[name="address"]');
-        const time = document.querySelector('select[name="time"]');
-        const number = document.querySelector('input[name="number"]');
+    var name = document.getElementById('inputName').value;
+    var email = document.getElementById('inputEmail').value;
+    var address = document.getElementById('inputAddress').value;
+    var contactNumber = document.getElementById('inputNumber').value;
+    var panNumber = document.getElementById('inputPan').value;
 
-        if (!service || !day.value || !address.value || !time.value || !number.value) {
-            alert("Please fill in all the values before proceeding!");
-            return false;
-        }
-        return true;
+    if (!name || !email || !address || !contactNumber || !panNumber) {
+        alert("Please fill in all the fields before proceeding!");
+        return false;
     }
+    return true;
+}
+
 </script>
     
 
     {% block head %} {% endblock %}
 </head>
 <body>
+  
    <header>
       <div class="col-2 bg-dark position-fixed" style="height: 100vh; padding: 0;">
         <div class="p-3 text-white text-center" style="background-color: #333; border-bottom: 1px solid #555;">
@@ -142,11 +144,11 @@
           />
         </div>
         <div class="col-md-6">
-          <label for="inputCity" class="form-label">Contact Number</label>
+          <label for="inputNumber" class="form-label">Contact Number</label>
           <input
             type="number"
             class="form-control"
-            id="inputCity"
+            id="inputNumber"
             name="contact_number"
             placeholder="Enter your contact number"
           />

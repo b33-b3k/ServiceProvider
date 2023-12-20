@@ -2,6 +2,7 @@
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
+from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -25,9 +26,9 @@ from booking.models import Inquiry
 def index(request):
     return render(request, 'admin_management/index.html')
 
-def reject_vendor_request(request, vendor_name):
+def reject_vendor_request(request, vendor_email):
     # Retrieve all vendor requests with the given name
-    vendor_requests = VendorRequest.objects.filter(business_name=vendor_name)
+    vendor_requests = VendorRequest.objects.filter(email=vendor_email)
 
     # If there's only one match, delete it
     if vendor_requests.count() == 1:
@@ -41,48 +42,40 @@ def reject_vendor_request(request, vendor_name):
         vendor_request.delete()
         return redirect('admin-dashboard')
         # For now, we'll just raise an error. You might want to handle this differently.
+        
 
     # If there's no match, show a 404 error
     else:
         raise Http404("VendorRequest not found")
 
-def accept_vendor_request(request, vendor_name):
-    # Retrieve all vendor requests with the given name
-    vendor_requests = VendorRequest.objects.filter(business_name=vendor_name)
+def accept_vendor_request(request, vendor_email):
+    vendor_requests = VendorRequest.objects.filter(email=vendor_email)
 
-    # If there's only one match, process it
-    if vendor_requests.count() == 1:
-        vendor_request = vendor_requests.first()
+    if not vendor_requests.exists():
+        raise Http404("VendorRequest not found")
 
-        staff = Staff(
-        name=vendor_request.business_name,
-        contact_number=vendor_request.contact_number,
-        service=vendor_request.business_category,
-        bio=vendor_request.business_description,
-        assigned_user=vendor_request.user,  # Associate the User from VendorRequest to the Staff
-        # ... add other fields as needed ...
-    )
-        staff.save()
+    vendor_request = vendor_requests.first()
 
-    # Delete the vendor request
+    # Check if a staff member with this email already exists
+    if Staff.objects.filter(email=vendor_email).exists():
+        messages.error(request, "A staff member with this email already exists.")
+        return redirect('admin-dashboard')
+
+    try:
+        Staff.objects.create(
+            name=vendor_request.business_name,
+            contact_number=vendor_request.contact_number,
+            service=vendor_request.business_category,
+            bio=vendor_request.business_description,
+            email=vendor_email,  # Assuming your Staff model has an email field
+            assigned_user=vendor_request.user,  # Associate the User from VendorRequest to the Staff
+        )
         vendor_request.delete()
-
-        
-        # ... (rest of your logic to create Staff and delete VendorRequest) ...
+        messages.success(request, "Vendor request accepted successfully.")
         return redirect('admin-dashboard')
-
-    # If there are multiple matches, show them to the admin
-    elif vendor_requests.count() > 1:
-        vendor_request = vendor_requests.first()
+    except IntegrityError:
+        messages.error(request, "An error occurred while processing the request. The staff member might already exist.")
         return redirect('admin-dashboard')
-    
-
-
-        
-
-    # If there's no match, show a 404 error
-    else:
-        raise Http404("VendorRequest not found")
 
 def admin_login(request):
     
@@ -111,6 +104,10 @@ def admin_login(request):
 
 
 def dashboard_view(request):
+
+    total_users = User.objects.count() 
+    total_service_providers = Staff.objects.count()  
+    pending_requests = VendorRequest.objects.count()
     vendor_requests = VendorRequest.objects.all()
     all_users = User.objects.all()
 
@@ -126,7 +123,10 @@ def dashboard_view(request):
     context={
         'vendor_requests':vendor_requests,
         'items':vendor_data,
-        'users':all_users
+        'users':all_users,
+          'total_users': total_users,
+        'total_service_providers': total_service_providers,
+        'pending_requests': pending_requests
     }
    
 

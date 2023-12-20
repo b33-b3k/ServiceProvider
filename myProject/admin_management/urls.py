@@ -9,8 +9,8 @@ urlpatterns = [
 
     #dashboard
     path('dashboard-admin/', views.dashboard_view, name='admin-dashboard'),
-    path('accept_vendor_request/<str:vendor_name>/', views.accept_vendor_request, name='accept_vendor_request'),
-    path('admin/reject_vendor_request/<str:vendor_name>/', views.reject_vendor_request, name='reject_vendor_request'),
+    path('accept_vendor_request/<str:vendor_email>/', views.accept_vendor_request, name='accept_vendor_request'),
+    path('reject_vendor_request/<str:vendor_email>/', views.reject_vendor_request, name='reject_vendor_request'),
     
     #delete user
     path('delete-user/<int:id>/', views.delete_user, name='delete-user'),

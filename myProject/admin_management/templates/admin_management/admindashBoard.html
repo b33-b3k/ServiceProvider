@@ -20,8 +20,12 @@
     <title>Admin Dashboard</title>
   </head>
   <body>
+    
     {% if user.is_authenticated %}
     <div class="container-fluid">
+        {% if messages %} {% for message in messages %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %} {% endif %}
       <div class="row">
         <!-- Sidebar -->
            <div class="col-2 bg-dark" style="height: 100vh; padding: 0;">
@@ -74,7 +78,6 @@
               <th class="text-center" scope="col"> Email</th>
            
               <th class="text-center" scope="col">Date Joined</th>
-              <th class="text-center" scope="col">Staff status</th>
 
             </tr>
           </thead>
@@ -85,7 +88,6 @@
               <td class="text-center">{{user.email}}</td>
 
               <td class="text-center">{{user.date_joined}}</td>
-              <td class="text-center">{{user.is_staff}}</td>
             </tr>
               {% endfor %}
           </tbody>
@@ -110,7 +112,7 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">{{ vendor_request.business_name }}</h5>
+                    <h5 class="card-title">{{ vendor_request.business_category }}</h5>
                     <p class="card-text">{{ vendor_request.business_description }}</p>
                     <p class="card-text">
                       <small class="text-muted">{{ vendor_request.user.username }}</small><br>
@@ -124,9 +126,9 @@
                     
                 </div>
                 <div class="card-footer bg-white">
-                        <a href="{% url 'accept_vendor_request' vendor_request.business_name %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'accept_vendor_request' vendor_request.email %}" class="btn btn-success">Accept</a> 
 
-                        <a href="{% url 'reject_vendor_request' vendor_request.business_name %}" class="btn btn-danger">Reject</a>
+                        <a href="{% url 'reject_vendor_request' vendor_request.email %}" class="btn btn-danger">Reject</a> 
 
                 </div>
             </div>
@@ -203,37 +205,40 @@
           </div>
 
           <!-- Default section to be displayed initially (e.g., a welcome message or dashboard overview) -->
+
+          
  <div id="default-section">
         <div class="p-3">
             <h1>Welcome to the Admin Dashboard</h1>
             <p>Manage and oversee the entire system from this central hub.</p>
         </div>
-        <div class="row p-3">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Users</h5>
-                        <p class="card-text">120</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Service Providers</h5>
-                        <p class="card-text">40</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Pending Service Providers Requests</h5>
-                        <p class="card-text">5</p>
-                    </div>
-                </div>
+<div class="row p-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text">{{ total_users }}</p>
             </div>
         </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Service Providers</h5>
+                <p class="card-text">{{ total_service_providers }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pending Service Providers Requests</h5>
+                <p class="card-text">{{ pending_requests }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -45,30 +45,33 @@ def login_view(request):
     else:
         return HttpResponse("Method Not Allowed", status=405)  # Return an HTTP 405 Method Not Allowed for unsupported methods
 
+
+    
+
+
 def vendor_dashboard(request):
-    # Fetch appointments associated with the logged-in vendor
+    # Fetch the staff member associated with the logged-in user
+    items = Inquiry.objects.all()
+
     try:
-        # Fetch appointments associated with the logged-in vendor
-        appointments = Appointment.objects.all()
-        staffs=Staff.objects.all()
-        user = User.objects.all()
-        
+        staff_member = Staff.objects.get(name=request.user)
+        print(request.user)
+    except Staff.DoesNotExist:
+        # Handle case where logged-in user is not a staff member
+        return HttpResponseBadRequest("You are not registered as a staff member.")
 
-        print(user)
-
-        print(appointments)
+    try:
+        # Fetch appointments associated with the logged-in staff member
+        appointments = Appointment.objects.filter(staff=staff_member.name)
+        print(staff_member)
     except Appointment.DoesNotExist:
-        # Handle the case where no appointments are found for the vendor
+        # Handle the case where no appointments are found for the staff member
         appointments = []
-    except Exception as e:
-        # Handle other unexpected database errors
-        return HttpResponseBadRequest(f"An error occurred: {e}")
+
     context = {
         'appointments': appointments,
-        'items': staffs,
-        'usersss':user
-
-        
+        'staff_member': staff_member,
+        "items": items
     }
     return render(request, 'vendordashBoard.html', context)
 
@@ -103,7 +106,11 @@ def become_vendor(request):
     print(request.POST)
 
     if request.method == 'POST':
-        business_name = request.POST.get('business_name')
+        # name 
+        business_name= request.POST.get("username")
+
+
+        
         business_address = request.POST.get('business_address')
         contact_number = request.POST.get('contact_number')
         email = request.POST.get('email')
@@ -112,23 +119,23 @@ def become_vendor(request):
         pan_number = request.POST.get('pan_number')
 
         # Check if required fields are not empty
-        if not business_name or not business_address or not contact_number:
-            messages.error(request, 'Please fill out all required fields.')
-        else:
+        
             # Create and save the VendorRequest instance
-            vendor_request = VendorRequest(
-                user=request.user,  # Assign the current user
+        vendor_request = VendorRequest(
+                user=request.user,  # Assign the current user,
                 business_name=business_name,
+                
+                
                 business_address=business_address,
                 contact_number=contact_number,
                 email=email,
                 business_description=business_description,
                 business_category=business_category,
                 pan_number=pan_number,
-            )
-            vendor_request.save()
-            messages.success(request, 'Vendor request submitted successfully.')
-            return redirect('booking')  # Redirect to a success view or page
+        )
+        vendor_request.save()
+        messages.success(request, 'Vendor request submitted successfully.')
+        return redirect('booking')  # Redirect to a success view or page
 
     return render(request, 'become_vendor.html')
 
@@ -147,7 +154,16 @@ def logout_view(request):
 def booking(request):
     weekdays = validWeekday(7)
     validateWeekdays = isWeekdayValid(weekdays)
-    times = ["3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"]
+    times = [
+        "9 am",
+        "10 am",
+        "11 am",
+        "12 pm",
+        "1 pm",
+        "2 pm",
+        "3 pm",
+        "4 pm"
+    ]
     staff_members = Staff.objects.all()  # Query all staff members
 
     if request.method == 'POST':
@@ -191,7 +207,14 @@ def booking(request):
 def bookingSubmit(request):
     user = request.user
     times = [
-        "3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"
+        "9 am",
+        "10 am",
+        "11 am",
+        "12 pm",
+        "1 pm",
+        "2 pm",
+        "3 pm",
+        "4 pm"
     ]
     today = datetime.now()
     minDate = today.strftime('%Y-%m-%d')
@@ -202,7 +225,15 @@ def bookingSubmit(request):
     # Get stored data from django session:
     day = request.session.get('day')
     service = request.session.get('service')
-    staff_members = Staff.objects.all()
+    print(service)
+
+    # Filter staff members based on the selected service
+    if service == 'Plumber':
+        staff_members = Staff.objects.filter(service='Plumber')
+    elif service == 'Electrician':
+        staff_members = Staff.objects.filter(service='Electrician')
+    else:
+        staff_members = Staff.objects.all()
 
     if request.method == 'POST':
         time = request.POST.get("time")
@@ -219,18 +250,14 @@ def bookingSubmit(request):
         if service != None:
             if day <= maxDate and day >= minDate:
                 
-                        if Appointment.objects.filter(day=day, time=time).count() < 1:
-                            AppointmentForm = Appointment.objects.filter(user=user).update(
-                                user = user,
-                                service = service,
-                                day = day,
-                                time = time,
-                                staff = staff_name,
-                            ) 
-                            messages.success(request, "Appointment Booked!")
-                            return redirect('booking')
-                        else:
-                            messages.success(request, "The Selected Time Has Been Reserved Before!")
+                      appointment, created = Appointment.objects.get_or_create(
+            day=day, 
+            time=time, 
+            defaults={
+                'user': user,
+                'service': service,
+                'staff': staff_name,
+            })
                     
             else:
                     messages.success(request, "The Selected Date Isn't In The Correct Time Period!")
@@ -242,7 +269,6 @@ def bookingSubmit(request):
     return render(request, 'bookingSubmit.html', {
         'times': times, 'staff': staff_members
     })
-
 def userPanel(request):
     user = request.user
     appointments = Appointment.objects.filter(user=user).order_by('day', 'time')
@@ -356,7 +382,14 @@ def appointmentFinished(request,id):
 def userUpdateSubmit(request, id):
     user = request.user
     times = [
-        "3 PM", "3:30 PM", "4 PM", "4:30 PM", "5 PM", "5:30 PM", "6 PM", "6:30 PM", "7 PM", "7:30 PM"
+        "9 am ",
+        "10 am ",
+        "11 am ",
+        "12 pm ",
+        "1 pm ",
+        "2 pm ",
+        "3 pm ",
+        "4 pm "
     ]
     today = datetime.now()
     minDate = today.strftime('%Y-%m-%d')

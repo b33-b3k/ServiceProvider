@@ -75,7 +75,7 @@
     }
 </style>
 <script>
-    function validateForm() {
+    function validateeForm() {
         const service = document.querySelector('input[name="service"]:checked');
         const day = document.querySelector('select[name="day"]');
         const address = document.querySelector('input[name="address"]');
@@ -88,14 +88,17 @@
         }
         return true;
     }
-</script>
+</script> 
 
 
 <div class="booking-container">
+     {% if messages %} {% for message in messages %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %} {% endif %}
     {% if user.is_authenticated %}
     <h1 class="text-center">Online Booking</h1>
 
-    <form method="post" action="{% url 'booking' %}" onsubmit="return validateForm()">
+    <form method="post" action="{% url 'booking' %}" onsubmit="return validateeForm()">
         {% csrf_token %}
         <div class="radio-container">
     <label class="radio-label">
