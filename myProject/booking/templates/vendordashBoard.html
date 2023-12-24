@@ -32,6 +32,7 @@
         }
 
         .content-section {
+            display: none;
             transition: opacity 0.3s;
         }
 
@@ -45,13 +46,13 @@
     </style>
 
     <title>Service Provider Dashboard</title>
-     {% if messages %}
+    {% if messages %}
     <script>
         {% for message in messages %}
             alert("{{ message }}");
         {% endfor %}
     </script>
-{% endif %}
+    {% endif %}
 </head>
 
 <body>
@@ -80,7 +81,6 @@
                                 Delivered
                             </a>
                         </li>
-                       
                         <li class="nav-item mt-auto">
                             <a class="nav-link text-white" href="logout-view">
                                 <i class="bi bi-box-arrow-left me-2"></i>
@@ -94,102 +94,93 @@
             <!-- Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Appointments Section -->
-               <div id="appointments-section" class="content-section mt-5">
-    <div class="container">
-        <h1 class="mb-4">Appointments</h1>
-        {% if appointments %}
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Day</th>
-                        <th>User Name</th>
-                        <th>Email</th>
-                        <th>Staff name</th>
-                        <th>Service</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                    <tr>
-                        <td>{{ appointment.day }}</td>
-                        <td>{{ appointment.user }}</td>
-                        <td>{{ appointment.user.email }}</td>
-                        <td>{{ appointment.staff }}</td>
-                        <td>{{ appointment.service }}</td>
-                        <td>
-                            {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'userUpdate' appointment.id %}">Edit</a> {% endcomment %}
-<a class="btn btn-success btn-sm" href="{% url 'appointmentFinished' appointment.id %}">
-    
-    {% if appointment.isFinished == "Yes" %}
-        Done
-    {% else %}
-        Mark as Done
-    {% endif %}
-</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="alert alert-info">
-            No appointments available.
-        </div>
-        {% endif %}
-    </div>
-</div>
+                <div id="appointments-section" class="content-section mt-5">
+                    <div class="container">
+                        <h1 class="mb-4">Appointments</h1>
+                        {% if appointments %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                        <th>Staff name</th>
+                                        <th>Service</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in appointments %}
+                                    <tr>
+                                        <td>{{ appointment.day }}</td>
+                                        <td>{{ appointment.user }}</td>
+                                        <td>{{ appointment.user.email }}</td>
+                                        <td>{{ appointment.staff }}</td>
+                                        <td>{{ appointment.service }}</td>
+                                        <td>
+                                            <a class="btn btn-success btn-sm" href="{% url 'appointmentFinished' appointment.id %}">
+                                                {% if appointment.isFinished == "Yes" %}
+                                                    Done
+                                                {% else %}
+                                                    Mark as Done
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            No appointments available.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
 
-
-<!-- Delivered Section -->
-<div id="delivered-section" class="content-section mt-5">
-    <div class="container">
-        <h1 class="mb-4">Delivered</h1>
-        {% if appointments %}
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Client Name</th>
-                        <th>Email</th>
-                        <th>Service</th>
-                        <th>Day</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for appointment in appointments %}
-                    {% if appointment.isFinished == "Yes" %}
-                    <tr>
-                        <td>{{ appointment.user.username }}</td> 
-                        <td>{{ appointment.user.email }}</td>
-                        <td>{{ appointment.service }}</td>
-                        <td>{{ appointment.day }}</td>
-                    </tr>
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="alert alert-info">
-            No delivered items available.
-        </div>
-        {% endif %}
-    </div>
-</div>
-
-
- 
-
-                
-                
+                <!-- Delivered Section -->
+                <div id="delivered-section" class="content-section mt-5">
+                    <div class="container">
+                        <h1 class="mb-4">Delivered</h1>
+                        {% if appointments %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <th>Email</th>
+                                        <th>Service</th>
+                                        <th>Day</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in appointments %}
+                                        {% if appointment.isFinished == "Yes" %}
+                                            <tr>
+                                                <td>{{ appointment.user.username }}</td>
+                                                <td>{{ appointment.user.email }}</td>
+                                                <td>{{ appointment.service }}</td>
+                                                <td>{{ appointment.day }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            No delivered items available.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
 
                 <!-- Default Section -->
                 <div id="default-section" class="mt-5">
                     <h1>Welcome to the Service Provider Dashboard</h1>
-                    <p>From here, you can manage all your appointments, view delivered orders, and interact with other service provider. Use the navigation on the left to get started.</p>
+                    <p>From here, you can manage all your appointments, view delivered orders, and interact with other service providers. Use the navigation on the left to get started.</p>
                 </div>
             </main>
         </div>
@@ -225,7 +216,7 @@
         });
     </script>
     {% else %}
-    
+
     <h1>Access Denied</h1>
     <p>You do not have permission to access this page.</p>
     <a href="{% url 'login-admin' %}">Login</a>

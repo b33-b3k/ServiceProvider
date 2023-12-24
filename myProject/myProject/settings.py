@@ -26,15 +26,13 @@ SECRET_KEY = 'django-insecure-2befwuch&ue__$eibf)6p)_xdkzs^!8i893gb31+4hv=dv4h50
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-
-
-# Application definition
-
 INSTALLED_APPS = [
     'admin_management',
     'booking',
     
+    
+
+        
 
 
 
@@ -58,6 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'myProject.urls'
+
 
 TEMPLATES = [
     {

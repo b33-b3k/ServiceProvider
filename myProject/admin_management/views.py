@@ -3,7 +3,7 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
 from django.db import IntegrityError
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
@@ -49,7 +49,9 @@ def reject_vendor_request(request, vendor_email):
         raise Http404("VendorRequest not found")
 
 def accept_vendor_request(request, vendor_email):
+
     vendor_requests = VendorRequest.objects.filter(email=vendor_email)
+  
 
     if not vendor_requests.exists():
         raise Http404("VendorRequest not found")
@@ -76,6 +78,7 @@ def accept_vendor_request(request, vendor_email):
     except IntegrityError:
         messages.error(request, "An error occurred while processing the request. The staff member might already exist.")
         return redirect('admin-dashboard')
+        
 
 def admin_login(request):
     

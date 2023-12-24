@@ -54,8 +54,9 @@ def vendor_dashboard(request):
     items = Inquiry.objects.all()
 
     try:
-        staff_member = Staff.objects.get(name=request.user)
-        print(request.user)
+        # Make the name field case-insensitive
+        staff_member = Staff.objects.get(name__iexact=request.user.username)
+        print(request.user.username)
     except Staff.DoesNotExist:
         # Handle case where logged-in user is not a staff member
         return HttpResponseBadRequest("You are not registered as a staff member.")
@@ -74,7 +75,6 @@ def vendor_dashboard(request):
         "items": items
     }
     return render(request, 'vendordashBoard.html', context)
-
 def submit_staff_data(request):
     if request.method == 'POST':
         staff_name = request.POST.get('staff_name')
@@ -308,17 +308,10 @@ def userUpdate(request, id):
     appointment = Appointment.objects.get(pk=id)
     
     # Convert the appointment.day string to a datetime object
-    userdatepicked = datetime.strptime(appointment.day, '%Y-%m-%d')
+    # userdatepicked = datetime.strptime(appointment.day, '%Y-%m-%d')
     
     # Copy booking:
     today = datetime.today()
-    minDate = today.strftime('%Y-%m-%d')
-
-
-    # 24h if statement in template:
-    delta24 = userdatepicked.strftime('%Y-%m-%d') >= (today + timedelta(days=1)).strftime('%Y-%m-%d')
-    
-    # Calling 'validWeekday' Function to Loop days you want in the next 21 days:
     weekdays = validWeekday(22)
 
     # Only show the days that are not full:
@@ -337,7 +330,7 @@ def userUpdate(request, id):
     return render(request, 'userUpdate.html', {
             'weekdays': weekdays,
             'validateWeekdays': validateWeekdays,
-            'delta24': delta24,
+            # 'delta24': delta24,
             'id': id,
             
         })
