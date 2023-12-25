@@ -1,0 +1,12 @@
+# Vercel
+.vercel
+
+# JSON files
+*.json
+
+# Yarn lock file
+yarn.lock
+
+# Node modules
+node_modules/
+
