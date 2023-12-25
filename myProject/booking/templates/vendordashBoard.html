@@ -111,24 +111,45 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for appointment in appointments %}
-                                    <tr>
-                                        <td>{{ appointment.day }}</td>
-                                        <td>{{ appointment.user }}</td>
-                                        <td>{{ appointment.user.email }}</td>
-                                        <td>{{ appointment.staff }}</td>
-                                        <td>{{ appointment.service }}</td>
-                                        <td>
-                                            <a class="btn btn-success btn-sm" href="{% url 'appointmentFinished' appointment.id %}">
-                                                {% if appointment.isFinished == "Yes" %}
-                                                    Done
-                                                {% else %}
-                                                    Mark as Done
-                                                {% endif %}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
+                                 {% for appointment in appointments %}
+<tr>
+    <td>{{ appointment.day }}</td>
+    <td>{{ appointment.user }}</td>
+    <td>{{ appointment.user.email }}</td>
+    <td>{{ appointment.staff }}</td>
+    <td>{{ appointment.service }}</td>
+    <td>
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#markAsDoneModal{{ appointment.id }}">
+            {% if appointment.isFinished == "Yes" %}
+                Done
+            {% else %}
+                Mark as Done
+            {% endif %}
+        </button>
+
+        <!-- Mark as Done Modal -->
+        <div class="modal fade" id="markAsDoneModal{{ appointment.id }}" tabindex="-1" aria-labelledby="markAsDoneModalLabel{{ appointment.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="markAsDoneModalLabel{{ appointment.id }}">Mark as Done</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to mark this appointment as done?</p>
+                        <!-- Add additional details or information here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="{% url 'appointmentFinished' appointment.id %}" class="btn btn-success">Yes, Mark as Done</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+
                                 </tbody>
                             </table>
                         </div>

@@ -119,9 +119,16 @@ def become_vendor(request):
         pan_number = request.POST.get('pan_number')
 
         # Check if required fields are not empty
+
+
+        #check if vendor request already exist
+        if VendorRequest.objects.filter(user=request.user).exists():
+            messages.error(request, "You have already submitted a vendor request.")
+        else:
+
         
             # Create and save the VendorRequest instance
-        vendor_request = VendorRequest(
+            vendor_request = VendorRequest(
                 user=request.user,  # Assign the current user,
                 business_name=business_name,
                 
@@ -133,8 +140,8 @@ def become_vendor(request):
                 business_category=business_category,
                 pan_number=pan_number,
         )
-        vendor_request.save()
-        messages.success(request, 'Vendor request submitted successfully.')
+            vendor_request.save()
+            messages.success(request, 'Vendor request submitted successfully.')
         return redirect('booking')  # Redirect to a success view or page
 
     return render(request, 'become_vendor.html')
@@ -267,7 +274,8 @@ def bookingSubmit(request):
         return redirect('booking')
 
     return render(request, 'bookingSubmit.html', {
-        'times': times, 'staff': staff_members
+        'times': times, 'staff': staff_members,
+        
     })
 def userPanel(request):
     user = request.user

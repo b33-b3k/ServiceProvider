@@ -9,6 +9,12 @@
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
       crossorigin="anonymous"
     />
+    <!-- Include Bootstrap CSS and JavaScript -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 <style>
     body {
         background-color: #f4f6f9;
@@ -19,10 +25,10 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
-    .custom-card:hover {
+    {% comment %} .custom-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
+    } {% endcomment %}
 
     .card-header {
         background-color: #007bff;
@@ -86,11 +92,90 @@
                     {% endif %}
                 </span>
             </div>
-            <form method="POST" action="{% url 'submit_staff_data' %}">
-                {% csrf_token %}
-                <input type="hidden" name="staff_name" value="{{ staff_member.name }}">
-                <button type="submit" class="btn btn-primary rounded-pill">Choose</button>
-            </form>
+<form method="POST" action="{% url 'submit_staff_data' %}" id="staffForm">
+    {% csrf_token %}
+    <input type="hidden" name="staff_name" value="{{ staff_member.name }}">
+
+    <!-- Choose button with integrated modal trigger -->
+    <button type="button" class="btn btn-primary rounded-pill" data-toggle="modal" data-target="#confirmationModal">
+        Choose
+    </button>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to choose {{ staff_member.name }}?
+
+                    {% comment %} write details of staff member and appointments {% endcomment %}
+                    <!-- Details of staff member and appointments -->
+          <div class="container mt-5">
+        <table class="table table-bordered border-primary">
+            <tbody>
+                <tr>
+                    <th scope="row" class="table-primary">Provider Name</th>
+                    <td>{{ staff_member.name }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="table-primary">Provider Tier</th>
+                    <td>{{ staff_member.tier }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="table-primary">Service</th>
+                    <td>{{ staff_member.service }}</td>
+                </tr>
+
+                
+
+
+            </tbody>
+        </table>
+    </div>
+
+                    
+                    
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+<button type="submit" class="btn btn-primary" onclick="submitForm(event)">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function submitForm() {
+        // Make an AJAX request to submit_staff_data
+        $.ajax({
+            type: 'POST',
+            url: '{% url "submit_staff_data" %}',
+            data: $('#staffForm').serialize(),  // Serialize form data
+            success: function(response) {
+                // Handle the success response as needed
+                console.log(response);
+            },
+            error: function(error) {
+                // Handle the error response as needed
+                console.error(error);
+            }
+        });
+
+        // Close the modal
+        $('#confirmationModal').modal('hide');
+    }
+</script>
+
+
         </div>
     </div>
 </div>
